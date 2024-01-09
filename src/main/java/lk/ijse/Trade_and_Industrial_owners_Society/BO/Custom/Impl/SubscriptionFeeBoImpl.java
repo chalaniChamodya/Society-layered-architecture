@@ -1,9 +1,9 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.BO.Custom.SubscriptionFeeBO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.Impl.SubscriptionFeeDaoImpl;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.SubscriptionFeeDAO;
-import lk.ijse.TradeAndIndustryOwners.DTO.SubscriptionFeeDTO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SubscriptionFeeBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.SubscriptionFeeDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SubscriptionFeeDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SubscriptionFeeDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,17 +12,17 @@ public class SubscriptionFeeBoImpl implements SubscriptionFeeBO {
     SubscriptionFeeDAO subscriptionFeeDAO = new SubscriptionFeeDaoImpl();
 
     @Override
-    public SubscriptionFeeDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public SubscriptionFeeDto getData(String id) throws SQLException, ClassNotFoundException {
         return subscriptionFeeDAO.getData(id);
     }
 
     @Override
-    public boolean saveSubFee(SubscriptionFeeDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveSubFee(SubscriptionFeeDto dto) throws SQLException, ClassNotFoundException {
         return subscriptionFeeDAO.save(dto);
     }
 
     @Override
-    public boolean updateSubFee(SubscriptionFeeDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean updateSubFee(SubscriptionFeeDto dto) throws SQLException, ClassNotFoundException {
         return subscriptionFeeDAO.update(dto);
     }
 
@@ -39,5 +39,15 @@ public class SubscriptionFeeBoImpl implements SubscriptionFeeBO {
     @Override
     public ArrayList<String> getAllSubFeeId() throws SQLException, ClassNotFoundException {
         return subscriptionFeeDAO.getAllId();
+    }
+
+    @Override
+    public int unPaidSubscriptionFeeCount() throws SQLException, ClassNotFoundException {
+        return subscriptionFeeDAO.unPaidSubscriptionFeeCount();
+    }
+
+    @Override
+    public ArrayList<String> getAllUnpaidSubscriptionFeeId() throws SQLException, ClassNotFoundException {
+        return subscriptionFeeDAO.getAllUnpaidSubscriptionFeeId();
     }
 }

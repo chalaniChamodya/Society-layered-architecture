@@ -7,8 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FamilyMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FamilyMemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FamilyMemberDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.FamilyMemberModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -32,32 +36,17 @@ public class FamilyMemberFormController {
     public JFXButton btnCancel;
     private static FamilyMemberFormController controller;
 
-    FamilyMemberModel famMemModel = new FamilyMemberModel();
+    FamilyMemberBO familyMemberBO = new FamilyMemberBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
 
     public FamilyMemberFormController(){controller = this;}
 
     public static FamilyMemberFormController getInstance(){return controller;}
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
-        btnSelected(btnFamily);
-        btnUnselected(btnMember);
-        btnUnselected(btnCommittee);
+    public void initialize() throws SQLException, ClassNotFoundException {
+        ChangeButton.btnSelected(btnFamily);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnCommittee);
 
         getAllId();
         generateNextFamilyMemberId();
@@ -66,8 +55,8 @@ public class FamilyMemberFormController {
         lblIsAlive.setText("Yes");
     }
 
-    private void setDataInMemberIdComboBox() throws SQLException {
-        ArrayList<String> memberId = famMemModel.getAllMemberId();
+    private void setDataInMemberIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> memberId = memberBO.getAllMemberId();
         cmbMemberId.getItems().addAll(memberId);
     }
 
@@ -85,14 +74,13 @@ public class FamilyMemberFormController {
         return String.valueOf(cmbRelationship.getSelectionModel().getSelectedItem());
     }
 
-    private void generateNextFamilyMemberId() throws SQLException {
-        lblFamMemId.setText(famMemModel.generateNextFamilyMemberId());
+    private void generateNextFamilyMemberId() throws SQLException, ClassNotFoundException {
+        lblFamMemId.setText(familyMemberBO.generateNewFamilyMemberId());
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        FamilyMemberModel famMemModel = new FamilyMemberModel();
-        list = famMemModel.getAllFamilyMemberId();
+        list = familyMemberBO.getAllFamilyMemberId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -114,11 +102,11 @@ public class FamilyMemberFormController {
     }
 
     public void btnFamilyOnAction(ActionEvent actionEvent) {
-        btnSelected(btnFamily);
-        btnUnselected(btnMember);
-        btnUnselected(btnCancel);
-        btnUnselected(btnCommittee);
-        btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnFamily);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnUnselected(btnCommittee);
+        ChangeButton.btnUnselected(btnAdd);
     }
 
     public void btnMemberOnAction(ActionEvent actionEvent) throws IOException {
@@ -136,11 +124,11 @@ public class FamilyMemberFormController {
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        btnSelected(btnAdd);
-        btnSelected(btnFamily);
-        btnUnselected(btnMember);
-        btnUnselected(btnCancel);
-        btnUnselected(btnCommittee);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnSelected(btnFamily);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnUnselected(btnCommittee);
 
         String family_member_id = lblFamMemId.getText();
         String member_id = String.valueOf(cmbMemberId.getValue());
@@ -152,7 +140,7 @@ public class FamilyMemberFormController {
 
         FamilyMemberDto familyMemberDto = new FamilyMemberDto(family_member_id,member_id,name,relationship,occupation,date_of_birth,isAlive);
 
-        boolean isSaved = famMemModel.saveFamMember(familyMemberDto);
+        boolean isSaved = familyMemberBO.saveFamilyMember(familyMemberDto);
 
         if(isSaved){
             clearFeilds();
@@ -171,11 +159,11 @@ public class FamilyMemberFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnSelected(btnCancel);
-        btnSelected(btnFamily);
-        btnUnselected(btnMember);
-        btnUnselected(btnAdd);
-        btnUnselected(btnCommittee);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnSelected(btnFamily);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCommittee);
 
         clearFeilds();
     }

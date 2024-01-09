@@ -9,8 +9,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.GeneralMeetingBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MeetingAttendanceBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MeetingAttendanceBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MeetingAttendanceDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MeetingAttendanceModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.QRCodeReader;
 
@@ -19,6 +24,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+
+import static lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton.btnSelected;
+import static lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton.btnUnselected;
 
 public class GeneralMeetingAttendanceFormController {
 
@@ -35,48 +43,33 @@ public class GeneralMeetingAttendanceFormController {
     public JFXButton btnQr;
     //public TextField txtMeetingID;
 
-    MeetingAttendanceModel meetingAttendanceModel = new MeetingAttendanceModel();
+    MeetingAttendanceBO meetingAttendanceBO = new MeetingAttendanceBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
+    GeneralMeetingBO generalMeetingBO = new GeneralMeetingBoImpl();
 
     public GeneralMeetingAttendanceFormController(){controller = this;}
 
     public static GeneralMeetingAttendanceFormController getInstance(){return controller;}
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         setDataInMeetingIdComboBox();
         setDataInMemberIdComboBox();
     }
 
-    private void setDataInMemberIdComboBox() throws SQLException {
-        ArrayList<String> memberId = meetingAttendanceModel.getAllMemberId();
+    private void setDataInMemberIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> memberId = memberBO.getAllMemberId();
         cmbMemberID.getItems().addAll(memberId);
     }
 
-    private void setDataInMeetingIdComboBox() throws SQLException {
-        ArrayList<String> MeetingId = meetingAttendanceModel.getAllGeneralMeetingId();
+    private void setDataInMeetingIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> MeetingId = generalMeetingBO.getAllGeneralMeetingId();
         cmbGenMetingId.getItems().addAll(MeetingId);
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        MeetingAttendanceModel attendanceModel = new MeetingAttendanceModel();
-        list = attendanceModel.getAllGeneralMeetingId();
+        list = generalMeetingBO.getAllGeneralMeetingId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -109,7 +102,7 @@ public class GeneralMeetingAttendanceFormController {
 
         MeetingAttendanceDto dto = new MeetingAttendanceDto(meeting_id,member_id,name, date,time);
 
-        boolean isSaved = meetingAttendanceModel.isSavedGeneralMeetingAttendance(dto);
+        boolean isSaved = meetingAttendanceBO.save(dto);
 
         if(isSaved){
             getAllId();
@@ -134,12 +127,12 @@ public class GeneralMeetingAttendanceFormController {
         btnUnselected(btnAdd);
     }
 
-    public void btnQRScanOnAction(ActionEvent actionEvent) throws SQLException {
+    public void btnQRScanOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         btnSelected(btnQr);
         String memberId = QRCodeReader.initWebcam();
-        cmbGenMetingId.setValue(meetingAttendanceModel.getTodayGeneralMeetingId());
+        cmbGenMetingId.setValue(generalMeetingBO.getTodayGeneralMeetingId());
         cmbMemberID.setValue(memberId);
-        txtMemberNme.setText(meetingAttendanceModel.getMemberName(memberId));
+        txtMemberNme.setText(memberBO.getMemberName(memberId));
         txtTme.setText(String.valueOf(LocalTime.now()));
     }
 

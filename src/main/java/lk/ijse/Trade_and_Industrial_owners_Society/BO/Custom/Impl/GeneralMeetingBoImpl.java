@@ -1,28 +1,28 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.BO.Custom.GeneralMeetingBO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.GeneralMeetingDAO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.Impl.GeneralMeetingDaoImpl;
-import lk.ijse.TradeAndIndustryOwners.DTO.GeneralMeetingDTO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.GeneralMeetingDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.GeneralMeetingDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.GeneralMeetingDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class GeneralMeetingBoImpl implements GeneralMeetingBO{
+public class GeneralMeetingBoImpl implements GeneralMeetingBO {
     GeneralMeetingDAO generalMeetingDAO = new GeneralMeetingDaoImpl();
 
     @Override
-    public GeneralMeetingDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public GeneralMeetingDto getData(String id) throws SQLException, ClassNotFoundException {
         return generalMeetingDAO.getData(id);
     }
 
     @Override
-    public boolean saveGeneralMeeting(GeneralMeetingDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveGeneralMeeting(GeneralMeetingDto dto) throws SQLException, ClassNotFoundException {
         return generalMeetingDAO.save(dto);
     }
 
     @Override
-    public boolean updateGeneralMeeting(GeneralMeetingDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean updateGeneralMeeting(GeneralMeetingDto dto) throws SQLException, ClassNotFoundException {
         return generalMeetingDAO.update(dto);
     }
 
@@ -39,5 +39,10 @@ public class GeneralMeetingBoImpl implements GeneralMeetingBO{
     @Override
     public ArrayList<String> getAllGeneralMeetingId() throws SQLException, ClassNotFoundException {
         return generalMeetingDAO.getAllId();
+    }
+
+    @Override
+    public String getTodayGeneralMeetingId() throws SQLException, ClassNotFoundException {
+        return generalMeetingDAO.getTodayGeneralMeetingId();
     }
 }

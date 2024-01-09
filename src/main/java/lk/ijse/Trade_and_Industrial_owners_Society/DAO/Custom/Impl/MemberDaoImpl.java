@@ -1,21 +1,24 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.MemberDAO;
-import lk.ijse.TradeAndIndustryOwners.DTO.MemberDTO;
-import lk.ijse.TradeAndIndustryOwners.Utill.SQLUtill;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MemberDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DbConnection.DBConnection;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MemberDaoImpl implements MemberDAO {
     @Override
-    public MemberDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public MemberDto getData(String id) throws SQLException, ClassNotFoundException {
        ResultSet resultSet = SQLUtill.execute("SELECT * FROM member WHERE member_id = ?", id);
 
-        MemberDTO memberDTO = new MemberDTO();
+        MemberDto memberDTO = new MemberDto();
 
         if(resultSet.next()){
             memberDTO.setMember_id(resultSet.getString(1));
@@ -28,12 +31,12 @@ public class MemberDaoImpl implements MemberDAO {
     }
 
     @Override
-    public ArrayList<MemberDTO> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<MemberDto> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(MemberDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(MemberDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO member VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 dto.getMember_id(),
                 dto.getName_with_initials(),
@@ -52,7 +55,7 @@ public class MemberDaoImpl implements MemberDAO {
     }
 
     @Override
-    public boolean update(MemberDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(MemberDto dto) throws SQLException, ClassNotFoundException {
        return SQLUtill.execute("UPDATE member SET name_with_initials =?, " +
                "full_name = ?, " +
                "business_address = ?, " +
@@ -172,6 +175,43 @@ public class MemberDaoImpl implements MemberDAO {
             list.add(resultSet.getString(1));
         }
         return list;
+    }
+
+    @Override
+    public ArrayList<String> search(String searchTerm) throws SQLException, ClassNotFoundException {
+        ArrayList<String> searchList = new ArrayList<>();
+        String Name = "%"+searchTerm+"%";
+
+        ResultSet resultSet = SQLUtill.execute("SELECT * FROM member WHERE member_id = ? OR name_with_initials LIKE ?", searchTerm, Name);
+
+        if(resultSet.next()){
+            String memberId = resultSet.getString(1);
+            String name = resultSet.getString(2);
+            String joinedDate = resultSet.getString("joined_date");
+            String businessType = resultSet.getString("business_type");
+
+            searchList.add(memberId);
+            searchList.add(name);
+            searchList.add(joinedDate);
+            searchList.add(businessType);
+            searchList.add(resultSet.getString("business_contact_num"));
+            searchList.add(resultSet.getString("business_address"));
+        }
+        return searchList;
+    }
+
+    @Override
+    public Map<String, LocalDate> calculateMemberDuration() throws SQLException, ClassNotFoundException {
+        Map<String, LocalDate> memberJoinDates = new HashMap<>();
+
+        ResultSet resultSet = SQLUtill.execute("SELECT member_id, joined_date FROM member");
+
+        if (resultSet.next()){
+            String MemberId = resultSet.getString("member_id");
+            LocalDate joinedDate = resultSet.getDate("joined_date").toLocalDate();
+            memberJoinDates.put(MemberId, joinedDate);
+        }
+        return memberJoinDates;
     }
 
     @Override

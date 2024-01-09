@@ -5,8 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MemberModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Dto.TM.MemberTm;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -22,24 +23,25 @@ public class MemberBarFormController {
     public ImageView btnUpdate;
     public AnchorPane barPane;
 
-    MemberModel memberModel = new MemberModel();
+    MemberBO memberBO = new MemberBoImpl();
+
     public void setData(String id){
-        MemberTm memberTm = null;
+        MemberDto memberTm = null;
         try {
-            memberTm = memberModel.getData(id);
+            memberTm = memberBO.getData(id);
             this.member_id.setText(memberTm.getMember_id());
-            name.setText(memberTm.getName());
+            name.setText(memberTm.getName_with_initials());
             contact_no.setText(memberTm.getPersonal_contact_num());
             business_type.setText(memberTm.getBusiness_type());
             nic.setText(memberTm.getNic());
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException {
+    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         String id = member_id.getText();
-        boolean isDeleted = memberModel.deleteMember(id);
+        boolean isDeleted = memberBO.deleteMember(id);
 
         if(isDeleted){
             new Alert(Alert.AlertType.CONFIRMATION,"member deleted !").show();

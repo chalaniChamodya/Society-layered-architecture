@@ -7,8 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FamilyMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FamilyMemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.ScholarshipBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.ScholarshipBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.ScholarshipDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.DonationModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -30,48 +34,32 @@ public class ScholarshipFormController {
     public JFXButton btnCancel;
     private static ScholarshipFormController controller;
 
-    DonationModel scholModel = new DonationModel();
+    ScholarshipBO scholarshipBO = new ScholarshipBoImpl();
+    FamilyMemberBO familyMemberBO = new FamilyMemberBoImpl();
 
     public ScholarshipFormController(){controller = this;}
 
     public static ScholarshipFormController getInstance(){return controller;}
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         generateNextScholarshipId();
-        btnSelected(btnScholarship);
+        ChangeButton.btnSelected(btnScholarship);
         setDataInFamilyMemComboBox();
     }
 
-    private void setDataInFamilyMemComboBox() throws SQLException {
-        ArrayList<String> famMemberId = scholModel.getAllFamlyMemberId();
+    private void setDataInFamilyMemComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> famMemberId = familyMemberBO.getAllFamilyMemberId();
         txtFamilyMemberId.getItems().addAll(famMemberId);
     }
 
-    private void generateNextScholarshipId() throws SQLException {
-        lblBenefitId.setText(scholModel.generateNextScholId());
+    private void generateNextScholarshipId() throws SQLException, ClassNotFoundException {
+        lblBenefitId.setText(scholarshipBO.generateNewScolId());
     }
 
-    private void getAllId() throws SQLException {
+    private void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        DonationModel donationModel = new DonationModel();
-        list = donationModel.getAllScholarshipId();
+        list = scholarshipBO.getAllScholId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -97,11 +85,11 @@ public class ScholarshipFormController {
     }
 
     public void btnScholarshipOnAction(ActionEvent actionEvent) {
-        btnSelected(btnScholarship);
-        btnUnselected(btnDeathBenefit);
-        btnUnselected(btnSpecialSchol);
-        btnUnselected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnScholarship);
+        ChangeButton.btnUnselected(btnDeathBenefit);
+        ChangeButton.btnUnselected(btnSpecialSchol);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
     }
 
     public void btnDeathBenefitOnAction(ActionEvent actionEvent) throws IOException {
@@ -109,11 +97,11 @@ public class ScholarshipFormController {
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) {
-        btnSelected(btnAdd);
-        btnSelected(btnScholarship);
-        btnUnselected(btnDeathBenefit);
-        btnUnselected(btnCancel);
-        btnUnselected(btnSpecialSchol);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnSelected(btnScholarship);
+        ChangeButton.btnUnselected(btnDeathBenefit);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnUnselected(btnSpecialSchol);
 
         String scholId = lblBenefitId.getText();
         String date = String.valueOf(dateDate.getValue());
@@ -123,7 +111,7 @@ public class ScholarshipFormController {
         ScholarshipDto scholarshipDto = new ScholarshipDto(scholId, date, amonut, fam_mem_id);
 
         try {
-            boolean isSaved = scholModel.isSavedSchol(scholarshipDto);
+            boolean isSaved = scholarshipBO.saveSchol(scholarshipDto);
             if(isSaved){
                 clearFields();
                 generateNextScholarshipId();
@@ -142,11 +130,11 @@ public class ScholarshipFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnUnselected(btnAdd);
-        btnSelected(btnScholarship);
-        btnUnselected(btnDeathBenefit);
-        btnSelected(btnCancel);
-        btnUnselected(btnSpecialSchol);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnScholarship);
+        ChangeButton.btnUnselected(btnDeathBenefit);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnUnselected(btnSpecialSchol);
 
         clearFields();
     }

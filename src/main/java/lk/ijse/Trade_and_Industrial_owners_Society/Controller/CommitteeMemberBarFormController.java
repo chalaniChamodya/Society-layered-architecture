@@ -4,8 +4,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.CommitteeMemberModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Dto.TM.CommitteeMemberTm;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMemberDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -19,25 +20,25 @@ public class CommitteeMemberBarFormController {
     public ImageView btnDelete;
     public ImageView btnUpdate;
 
-    CommitteeMemberModel committeeMemberModel = new CommitteeMemberModel();
+    CommitteeMemberBO committeeMemberBO = new CommitteeMemberBoImpl();
 
     public static void getId(){CommitteeMemberBarFormController.id = id;}
 
     public void setData(String id) {
-        CommitteeMemberTm tm = null;
+        CommitteeMemberDto tm = null;
         try {
-            tm = committeeMemberModel.getData(id);
+            tm = committeeMemberBO.getData(id);
             this.comMemId.setText(tm.getCom_mem_id());
             name.setText(tm.getName());
             position.setText(tm.getPosition());
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException {
+    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         String id = comMemId.getText();
-        boolean isDeleted = committeeMemberModel.deleteCommitteeMember(id);
+        boolean isDeleted = committeeMemberBO.deleteCommitteeMember(id);
 
         if(isDeleted){
             new Alert(Alert.AlertType.CONFIRMATION,"Committee member deleted !").show();

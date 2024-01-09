@@ -1,8 +1,9 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.SpecialScholarshipDAO;
-import lk.ijse.TradeAndIndustryOwners.DTO.SpecialScholDTO;
-import lk.ijse.TradeAndIndustryOwners.Utill.SQLUtill;
+
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SpecialScholarshipDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SpecialScholDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,10 +14,10 @@ import java.util.Map;
 
 public class SpecialScholarshipDaoImpl implements SpecialScholarshipDAO {
     @Override
-    public SpecialScholDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public SpecialScholDto getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM special_schol WHERE schol_id = ?", id);
 
-        SpecialScholDTO donationTm = new SpecialScholDTO();
+        SpecialScholDto donationTm = new SpecialScholDto();
 
         if(resultSet.next()){
             donationTm.setSchol_id(resultSet.getString("schol_id"));
@@ -27,12 +28,12 @@ public class SpecialScholarshipDaoImpl implements SpecialScholarshipDAO {
     }
 
     @Override
-    public ArrayList<SpecialScholDTO> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<SpecialScholDto> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(SpecialScholDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(SpecialScholDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO special_schol VALUES(?, ?, ?, ?, ?)",
                 dto.getSchol_id(),
                 dto.getMember_id(),
@@ -43,7 +44,7 @@ public class SpecialScholarshipDaoImpl implements SpecialScholarshipDAO {
     }
 
     @Override
-    public boolean update(SpecialScholDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(SpecialScholDto dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 

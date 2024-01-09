@@ -7,8 +7,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MemberModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -34,23 +36,7 @@ public class MemberUpdateFormController {
     public JFXButton btnUpdate;
     public JFXButton btnCancel;
 
-    MemberModel memberModel = new MemberModel();
-
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
+    MemberBO memberBO = new MemberBoImpl();
 
     public void initialize() throws SQLException {
         setData();
@@ -60,8 +46,8 @@ public class MemberUpdateFormController {
     private void setData() {
         MemberDto memberDto = null;
         try {
-            memberDto =  memberModel.getDataToUpdateForm(id);
-        } catch (SQLException e) {
+            memberDto =  memberBO.getData(id);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -89,8 +75,8 @@ public class MemberUpdateFormController {
     }
 
     public void btnUpdateOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        btnSelected(btnUpdate);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnUpdate);
+        ChangeButton.btnUnselected(btnCancel);
 
         MemberDto memberDto = new MemberDto();
         memberDto.setMember_id(id);
@@ -106,7 +92,7 @@ public class MemberUpdateFormController {
         memberDto.setBusiness_contact_num(txtBusinesContactNumber.getText());
         memberDto.setJoined_date(String.valueOf(txtJoinedDate.getValue()));
 
-        boolean isUpdated = memberModel.updateMember(memberDto);
+        boolean isUpdated = memberBO.updateMember(memberDto);
 
         if(isUpdated){
             new Alert(Alert.AlertType.CONFIRMATION,"Member Updated !").show();

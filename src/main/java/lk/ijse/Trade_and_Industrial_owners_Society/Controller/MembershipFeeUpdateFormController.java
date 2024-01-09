@@ -7,10 +7,14 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MembershipFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.SubscriptionFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MembershipFeeBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SubscriptionFeeBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MembershipFeeDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SubscriptionFeeDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MembershipFeeModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.SubscriptionFeeModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -37,14 +41,15 @@ public class MembershipFeeUpdateFormController {
     public String dueType;
     public String name;
 
-    MembershipFeeModel membershipFeeModel = new MembershipFeeModel();
-    SubscriptionFeeModel subscriptionFeeModel = new SubscriptionFeeModel();
+    MembershipFeeBO membershipFeeBO = new MembershipFeeBoImpl();
+    SubscriptionFeeBO subscriptionFeeBO = new SubscriptionFeeBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
 
     public MembershipFeeUpdateFormController(){controller = this;}
 
     public static MembershipFeeUpdateFormController getInstance(){return controller;}
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         //btnSelected(btnSubscription);
         setDataInMemberIdComboBox();
@@ -57,8 +62,8 @@ public class MembershipFeeUpdateFormController {
             dueType = "Subscription Fee";
             SubscriptionFeeDto feeDto = null;
             try {
-                feeDto = subscriptionFeeModel.getDataToUpdateForm(id);
-            } catch (SQLException e) {
+                feeDto = subscriptionFeeBO.getData(id);
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             lblDueID.setText(feeDto.getSubscription_fee_id());
@@ -72,8 +77,8 @@ public class MembershipFeeUpdateFormController {
             dueType = "Membership Fee";
             MembershipFeeDto feeDto = null;
             try {
-                feeDto = membershipFeeModel.getDataToUpdateForm(id);
-            } catch (SQLException e) {
+                feeDto = membershipFeeBO.getData(id);
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
             lblDueID.setText(feeDto.getMember_fee_id());
@@ -93,19 +98,17 @@ public class MembershipFeeUpdateFormController {
         MembershipFeeUpdateFormController.id = id;
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list;
         if(id.startsWith("SF")){
-            SubscriptionFeeModel feeModel = new SubscriptionFeeModel();
-            list = feeModel.getSubscriptionFeeId();
+            list = subscriptionFeeBO.getAllSubFeeId();
 
             vBox.getChildren().clear();
             for(int i = 0; i< list.size(); i++){
                 loadTableData(list.get(i));
             }
         }else if(id.startsWith("MF")){
-            MembershipFeeModel feeModel = new MembershipFeeModel();
-            list = feeModel.getMembershipFeeId();
+            list = membershipFeeBO.getAllMemFeeId();
 
             vBox.getChildren().clear();
             for(int i = 0; i< list.size(); i++){
@@ -127,8 +130,8 @@ public class MembershipFeeUpdateFormController {
         }
     }
 
-    private void setDataInMemberIdComboBox() throws SQLException {
-        ArrayList<String> memberId = subscriptionFeeModel.getAllMemberId();
+    private void setDataInMemberIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> memberId = memberBO.getAllMemberId();
         cmbMemberId.getItems().addAll(memberId);
     }
 
@@ -138,12 +141,12 @@ public class MembershipFeeUpdateFormController {
     public void btnSubscriptionOnAction(ActionEvent actionEvent) {
     }
 
-    public void cmbMemberIdOnAction(ActionEvent actionEvent) throws SQLException {
-        name = subscriptionFeeModel.getMemberName(String.valueOf(cmbMemberId.getValue()));
+    public void cmbMemberIdOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        name = memberBO.getMemberName(String.valueOf(cmbMemberId.getValue()));
         lblName.setText(name);
     }
 
-    public void btnUpdateOnAction(ActionEvent actionEvent) throws IOException, SQLException {
+    public void btnUpdateOnAction(ActionEvent actionEvent) throws IOException, SQLException, ClassNotFoundException {
         if(id.startsWith("SF")){
             SubscriptionFeeDto feeDto = new SubscriptionFeeDto();
 
@@ -153,7 +156,7 @@ public class MembershipFeeUpdateFormController {
             feeDto.setDate(String.valueOf(dateDate.getValue()));
             feeDto.setAmount(txtAmount.getText());
 
-            boolean isUpdated = subscriptionFeeModel.updateSubscriptionFee(feeDto);
+            boolean isUpdated = subscriptionFeeBO.updateSubFee(feeDto);
 
             if(isUpdated){
                 new Alert(Alert.AlertType.CONFIRMATION,"Fee Updated !").show();
@@ -170,7 +173,7 @@ public class MembershipFeeUpdateFormController {
             feeDto.setDate(String.valueOf(dateDate.getValue()));
             feeDto.setAmount(txtAmount.getText());
 
-            boolean isUpdated = membershipFeeModel.updateMembershipFee(feeDto);
+            boolean isUpdated = membershipFeeBO.updateMemFee(feeDto);
 
             if(isUpdated){
                 new Alert(Alert.AlertType.CONFIRMATION,"Fee Updated !").show();

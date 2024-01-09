@@ -7,8 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FundingProgramBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FundingProgramBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.SponsorBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SponsorBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SponsorDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.SponsorModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -30,42 +34,27 @@ public class SponsorFormController {
     public ComboBox txtProgramId;
 
     private static SponsorFormController controller;
-    SponsorModel sponsorModel = new SponsorModel();
+
+   SponsorBO sponsorBO = new SponsorBoImpl();
+   FundingProgramBO programBO = new FundingProgramBoImpl();
 
     public SponsorFormController(){controller = this;}
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         generateNextSponsorId();
-        btnSelected(btnSponsor);
+        ChangeButton.btnSelected(btnSponsor);
         setDataInProgramIdComboBox();
     }
 
-    private void setDataInProgramIdComboBox() throws SQLException {
-        ArrayList<String> programId = sponsorModel.getAllProgramId();
+    private void setDataInProgramIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> programId = programBO.getAllFundingProgramId();
         txtProgramId.getItems().addAll(programId);
     }
 
-    private void getAllId() throws SQLException {
+    private void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        SponsorModel sponsorModel = new SponsorModel();
-        list = sponsorModel.getAllSponsorId();
+        list = sponsorBO.getAllSponsorId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -88,17 +77,17 @@ public class SponsorFormController {
 
     private void generateNextSponsorId() {
         try {
-            lblSponsorId.setText(sponsorModel.generateNextSponsorId());
-        } catch (SQLException e) {
+            lblSponsorId.setText(sponsorBO.generateNewSponsorId());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void btnSponsorOnAction(ActionEvent actionEvent) {
-        btnSelected(btnSponsor);
-        btnUnselected(btnFundingProgram);
-        btnUnselected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnSponsor);
+        ChangeButton.btnUnselected(btnFundingProgram);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
     }
 
     public void btnFundingProgramOnAction(ActionEvent actionEvent) throws IOException {
@@ -106,10 +95,10 @@ public class SponsorFormController {
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        btnSelected(btnSponsor);
-        btnSelected(btnAdd);
-        btnUnselected(btnCancel);
-        btnUnselected(btnFundingProgram);
+        ChangeButton.btnSelected(btnSponsor);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnUnselected(btnFundingProgram);
 
         String sponsor_id = lblSponsorId.getText();
         String program_id = String.valueOf(txtProgramId.getValue());
@@ -120,7 +109,7 @@ public class SponsorFormController {
 
         SponsorDto sponsorDto = new SponsorDto(sponsor_id, program_id, sponsor_name, description, date, amount);
 
-        boolean isSaved = sponsorModel.isSaved(sponsorDto);
+        boolean isSaved = sponsorBO.saveSponsor(sponsorDto);
 
         if(isSaved){
             clearFeilds();
@@ -142,10 +131,10 @@ public class SponsorFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnSelected(btnSponsor);
-        btnUnselected(btnAdd);
-        btnSelected(btnCancel);
-        btnUnselected(btnFundingProgram);
+        ChangeButton.btnSelected(btnSponsor);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnUnselected(btnFundingProgram);
 
         clearFeilds();
     }

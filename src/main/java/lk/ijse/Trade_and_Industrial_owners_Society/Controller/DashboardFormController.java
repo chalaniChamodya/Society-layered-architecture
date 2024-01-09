@@ -11,8 +11,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.DashboardModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MemberModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMeetingBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.GeneralMeetingBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -30,28 +32,28 @@ public class DashboardFormController {
     public Pane pagingPane;
     public VBox vBox;
 
-    DashboardModel dashboardModel = new DashboardModel();
+   GeneralMeetingBO generalMeetingBO = new GeneralMeetingBoImpl();
+   CommitteeMeetingBO committeeMeetingBO = new CommitteeMeetingBoImpl();
 
     public void initialize() throws SQLException {
-        dashboardModel.generalMeetingAttendanceCount();
+        /*dashboardModel.generalMeetingAttendanceCount();
         lblGeneralAttendance.setText(String.valueOf(dashboardModel.generalMeetingAttendanceCount()));
         lblCommitteeAttendance.setText(String.valueOf(dashboardModel.committeeMeetingAttendanceCount()));
         lblSubscriptionUnpaid.setText(String.valueOf(dashboardModel.unPaidSubscriptionFeeCount()));
         lblMembershipUnpaid.setText(String.valueOf(dashboardModel.unPaidMembershipFeeCount()));
         pieChart();
         comboChart();
-        getUpcomingMeeting();
+        getUpcomingMeeting();*/
     }
 
     private void getUpcomingMeeting() throws SQLException {
-        ArrayList<String> list = null;
-        DashboardModel dashboardModel = new DashboardModel();
+        /*ArrayList<String> list = null;
         list = dashboardModel.getUpComingMeetingId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
             loadTableData(list.get(i));
-        }
+        }*/
     }
 
     private void loadTableData(String id) {
@@ -69,14 +71,14 @@ public class DashboardFormController {
 
     public void pieChart(){
         PieChart pieChart = new PieChart();
-
+/*
         try {
             ObservableList<PieChart.Data> pieChartData = dashboardModel.getFundDataForPieChart();
             pieChart.setData(pieChartData);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        panePieChart.getChildren().add(pieChart);
+        panePieChart.getChildren().add(pieChart);*/
     }
 
     public void comboChart() throws SQLException {
@@ -89,16 +91,16 @@ public class DashboardFormController {
         xAxis.setLabel("Category");
         yAxis.setLabel("Amount");
 
-        ObservableList<XYChart.Data<String, Number>> fundData = dashboardModel.monthlyFund();
-        ObservableList<XYChart.Data<String, Number>> expenseData = dashboardModel.monthlyExpense();
-
+       /* ObservableList<XYChart.Data<String, Number>> fundData = dashboardModel.monthlyFund();
+        ObservableList<XYChart.Data<String, Number>> expenseData = dashboardModel.monthlyExpense();*/
+/*
         XYChart.Series<String, Number> fundSeries = new XYChart.Series<>("Funds", fundData);
         XYChart.Series<String, Number> expenseSeries = new XYChart.Series<>("Expenses", expenseData);
 
         barChart.getData().addAll(fundSeries);
         lineChart.getData().addAll(expenseSeries);
 
-        panePieChart1.getChildren().addAll(barChart, lineChart);
+        panePieChart1.getChildren().addAll(barChart, lineChart);*/
     }
 
     public void btnSubscriptionFeeUnpaidOnAction(MouseEvent mouseEvent) throws IOException {

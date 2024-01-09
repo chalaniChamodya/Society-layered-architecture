@@ -10,13 +10,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.GeneralMeetingBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.GeneralMeetingDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.GeneralMeetingModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class GeneralMeetingUpdateFormController {
@@ -34,36 +35,21 @@ public class GeneralMeetingUpdateFormController {
     public ComboBox txtMeetingType;
     public JFXButton btnUpdate;
     public JFXButton btnCancel;
-    GeneralMeetingModel meetingModel = new GeneralMeetingModel();
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
+    GeneralMeetingBO generalMeetingBO = new GeneralMeetingBoImpl();
 
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
 
-    public void initialize() throws SQLException {
-        btnSelected(btnGeneral);
+    public void initialize() throws SQLException, ClassNotFoundException {
+        ChangeButton.btnSelected(btnGeneral);
         getAllId();
         getMeetingId();
         setData();
         setDataInComboBox();
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        GeneralMeetingModel generalMeetingModel = new GeneralMeetingModel();
-        list = generalMeetingModel.getAllMeetingId();
+        list = generalMeetingBO.getAllGeneralMeetingId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -96,8 +82,8 @@ public class GeneralMeetingUpdateFormController {
         GeneralMeetingDto meetingDto = null;
 
         try {
-            meetingDto = meetingModel.getDataToUpdateForm(id);
-        } catch (SQLException e) {
+            meetingDto = generalMeetingBO.getData(id);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -132,7 +118,7 @@ public class GeneralMeetingUpdateFormController {
     public void cmbMeetingTypeOnAction(ActionEvent actionEvent) {
     }
 
-    public void btnUpdateOnAction(ActionEvent actionEvent) throws SQLException, IOException {
+    public void btnUpdateOnAction(ActionEvent actionEvent) throws SQLException, IOException, ClassNotFoundException {
         GeneralMeetingDto meetingDto = new GeneralMeetingDto();
         meetingDto.setGeneral_meeting_id(id);
         meetingDto.setDate(String.valueOf(dateDate.getValue()));
@@ -140,7 +126,7 @@ public class GeneralMeetingUpdateFormController {
         meetingDto.setDescription(txtPurpose.getText());
         meetingDto.setLocation(txtLocation.getText());
 
-        boolean isUpdated = meetingModel.updateGeneralMeeting(meetingDto);
+        boolean isUpdated = generalMeetingBO.updateGeneralMeeting(meetingDto);
         if(isUpdated){
             new Alert(Alert.AlertType.CONFIRMATION,"Meeting Updated !").show();
             Navigation.switchPaging(pagingPane,"GeneralMeetingForm.fxml");

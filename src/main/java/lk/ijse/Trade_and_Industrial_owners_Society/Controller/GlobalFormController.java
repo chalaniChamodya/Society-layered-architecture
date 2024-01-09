@@ -11,7 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.GlobalModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class GlobalFormController {
 
     public static GlobalFormController getInstance(){return controller;}
 
-    GlobalModel model = new GlobalModel();
+    MemberBO memberBO = new MemberBoImpl();
 
     public void initialize(){
         btnSelected(btnDashboard);
@@ -179,9 +180,9 @@ public class GlobalFormController {
         Navigation.switchPaging(pagingPane,"DeathBenefitForm.fxml");
     }
 
-    public void btnSearchOnAction(ActionEvent actionEvent) throws SQLException {
+    public void btnSearchOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
         String searchTerm = searchId.getText();
-        ArrayList<String> searchItems = model.search(searchTerm);
+        ArrayList<String> searchItems = memberBO.search(searchTerm);
 
         if(searchItems.size() > 0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

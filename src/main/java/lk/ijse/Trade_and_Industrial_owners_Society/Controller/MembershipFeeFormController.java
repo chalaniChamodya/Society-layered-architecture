@@ -7,11 +7,16 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MembershipFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.SubscriptionFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MembershipFeeBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SubscriptionFeeBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MembershipFeeDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SubscriptionFeeDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MembershipFeeModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.SubscriptionFeeModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.SendText;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import javax.mail.MessagingException;
@@ -38,39 +43,23 @@ public class MembershipFeeFormController {
     public String dueType;
     public String name;
 
-    MembershipFeeModel membershipFeeModel = new MembershipFeeModel();
-    SubscriptionFeeModel subscriptionFeeModel = new SubscriptionFeeModel();
+    SubscriptionFeeBO subscriptionFeeBO = new SubscriptionFeeBoImpl();
+    MembershipFeeBO membershipFeeBO = new MembershipFeeBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
 
     public MembershipFeeFormController(){controller = this;}
 
     public static MembershipFeeFormController getInstance(){return controller;}
 
-
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
-        btnSelected(btnMembership);
+        ChangeButton.btnSelected(btnMembership);
         setDataInDueComboBox();
         setDataInMemberIdComboBox();
     }
 
-    private void setDataInMemberIdComboBox() throws SQLException {
-        ArrayList<String> memberId = subscriptionFeeModel.getAllMemberId();
+    private void setDataInMemberIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> memberId = memberBO.getAllMemberId();
         cmbMemberId.getItems().addAll(memberId);
     }
 
@@ -82,10 +71,9 @@ public class MembershipFeeFormController {
         cmbDueType.getItems().addAll(dueTypes);
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        MembershipFeeModel feeModel = new MembershipFeeModel();
-        list = feeModel.getMembershipFeeId();
+        list = membershipFeeBO.getAllMemFeeId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -107,26 +95,26 @@ public class MembershipFeeFormController {
     }
 
     public void btnMembershipOnAction(ActionEvent actionEvent) {
-        btnSelected(btnMembership);
-        btnUnselected(btnSubscription);
-        btnUnselected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnMembership);
+        ChangeButton.btnUnselected(btnSubscription);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
     }
 
     public void btnSubscriptionOnAction(ActionEvent actionEvent) throws IOException {
         Navigation.switchPaging(pagingPane,"SubscriptionFeeForm.fxml");
     }
 
-    public void cmbMemberIdOnAction(ActionEvent actionEvent) throws SQLException {
-        name = subscriptionFeeModel.getMemberName(String.valueOf(cmbMemberId.getValue()));
+    public void cmbMemberIdOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        name = memberBO.getMemberName(String.valueOf(cmbMemberId.getValue()));
         lblName.setText(name);
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        btnUnselected(btnSubscription);
-        btnSelected(btnAdd);
-        btnSelected(btnMembership);
-        btnUnselected(btnCancel);
+        ChangeButton.btnUnselected(btnSubscription);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnSelected(btnMembership);
+        ChangeButton.btnUnselected(btnCancel);
 
         String dueType = (String) cmbDueType.getValue();
         if(dueType.equals("Membership Fee")){
@@ -137,11 +125,11 @@ public class MembershipFeeFormController {
             String date = String.valueOf(dateDate.getValue());
             String amount = txtAmount.getText();
 
-            String email = membershipFeeModel.getMailAddress(member_id);
+            String email = memberBO.getMemberEmailAddress(member_id);
 
             MembershipFeeDto membershipFeeDto = new MembershipFeeDto(id, member_id, member_name, date, amount);
 
-            boolean isSaved = membershipFeeModel.isSaved(membershipFeeDto);
+            boolean isSaved = membershipFeeBO.saveMemFee(membershipFeeDto);
 
             if(isSaved){
                 Navigation.switchPaging(pagingPane,"MembershipFeeForm.fxml");
@@ -160,12 +148,12 @@ public class MembershipFeeFormController {
             String date = String.valueOf(dateDate.getValue());
             String amount = txtAmount.getText();
 
-            String email = membershipFeeModel.getMailAddress(member_id);
+            String email = memberBO.getMemberEmailAddress(member_id);
             System.out.println(email);
 
             SubscriptionFeeDto subscriptionFeeDto = new SubscriptionFeeDto(id, member_id, member_name, date, amount);
 
-            boolean isSaved = subscriptionFeeModel.isSaved(subscriptionFeeDto);
+            boolean isSaved = subscriptionFeeBO.saveSubFee(subscriptionFeeDto);
 
             if(isSaved){
                 try {
@@ -181,10 +169,10 @@ public class MembershipFeeFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnUnselected(btnSubscription);
-        btnUnselected(btnAdd);
-        btnSelected(btnMembership);
-        btnSelected(btnCancel);
+        ChangeButton.btnUnselected(btnSubscription);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnMembership);
+        ChangeButton.btnSelected(btnCancel);
     }
 
     public void cmbDueTypeOnAction(ActionEvent actionEvent) {
@@ -195,13 +183,13 @@ public class MembershipFeeFormController {
     private void generateNextDueId(String dueType) {
         try {
             if (dueType.equals("Membership Fee")) {
-                dueId = membershipFeeModel.generateNextDueId();
+                dueId = membershipFeeBO.generateNewMemFeeId();
                 lblDueID.setText(dueId);
             }else if(dueType.equals("Subscription Fee")){
-                dueId = subscriptionFeeModel.generateNextDueId();
+                dueId = subscriptionFeeBO.generateNewSubFeeId();
                 lblDueID.setText(dueId);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

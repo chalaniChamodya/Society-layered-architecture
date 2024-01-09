@@ -4,9 +4,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.CommitteeMeetingModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.GeneralMeetingModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Dto.TM.MeetingTm;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMeetingBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.GeneralMeetingBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMeetingDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.GeneralMeetingDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -19,36 +22,38 @@ public class MeetingBarFormController {
     public ImageView btnDelete;
     public ImageView btnUpdate;
 
-    GeneralMeetingModel generalMeetingModel = new GeneralMeetingModel();
-    CommitteeMeetingModel committeeMeetingModel = new CommitteeMeetingModel();
+    GeneralMeetingBO generalMeetingBO = new GeneralMeetingBoImpl();
+    CommitteeMeetingBO committeeMeetingBO = new CommitteeMeetingBoImpl();
 
     public void setData(String id){
-        MeetingTm meetingTm = null;
+
         if(id.startsWith("G")){
             try {
-                meetingTm = generalMeetingModel.getData(id);
-                this.meetingId.setText(meetingTm.getMeeting_id());
+                GeneralMeetingDto meetingTm = null;
+                meetingTm = generalMeetingBO.getData(id);
+                this.meetingId.setText(meetingTm.getGeneral_meeting_id());
                 date.setText(meetingTm.getDate());
                 Location.setText(meetingTm.getLocation());
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }else if(id.startsWith("C")){
             try {
-                meetingTm = committeeMeetingModel.getData(id);
-                this.meetingId.setText(meetingTm.getMeeting_id());
+                CommitteeMeetingDto meetingTm = null;
+                meetingTm = committeeMeetingBO.getData(id);
+                this.meetingId.setText(meetingTm.getCommittee_meeting_id());
                 date.setText(meetingTm.getDate());
                 Location.setText(meetingTm.getLocation());
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException {
+    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         String id = meetingId.getText();
         if(id.startsWith("G")){
-            boolean isDeleted = generalMeetingModel.deleteGeneralMeeting(id);
+            boolean isDeleted = generalMeetingBO.deleteGeneralMeeting(id);
 
             if(isDeleted){
                 new Alert(Alert.AlertType.CONFIRMATION,"meeting deleted !").show();
@@ -57,7 +62,7 @@ public class MeetingBarFormController {
             }
             GeneralMeetingFormController.getInstance().getAllId();
         }else if(id.startsWith("C")){
-            boolean isDeleted = committeeMeetingModel.deleteCommitteeMeeting(id);
+            boolean isDeleted = committeeMeetingBO.deleteCommitteeMeeting(id);
             if(isDeleted){
                 new Alert(Alert.AlertType.CONFIRMATION,"meeting deleted !").show();
             }else{

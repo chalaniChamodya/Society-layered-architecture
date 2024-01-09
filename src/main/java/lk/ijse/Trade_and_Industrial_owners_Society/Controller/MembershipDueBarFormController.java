@@ -4,9 +4,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MembershipFeeModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.SubscriptionFeeModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Dto.TM.MembershipDueTm;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MembershipFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.SubscriptionFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MembershipFeeBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SubscriptionFeeBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MembershipFeeDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SubscriptionFeeDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -19,36 +22,38 @@ public class MembershipDueBarFormController {
     public ImageView btnDelete;
     public ImageView btnUpdate;
 
-    SubscriptionFeeModel SfeeModel = new SubscriptionFeeModel();
-    MembershipFeeModel MfeeModel = new MembershipFeeModel();
+    SubscriptionFeeBO subscriptionFeeBO = new SubscriptionFeeBoImpl();
+    MembershipFeeBO membershipFeeBO = new MembershipFeeBoImpl();
 
     public void setData(String id) {
-        MembershipDueTm dueTm = null;
+
         if(id.startsWith("SF")){
             try {
-                dueTm = SfeeModel.getData(id);
-                this.fee_id.setText(dueTm.getId());
+                SubscriptionFeeDto dueTm = null;
+                dueTm = subscriptionFeeBO.getData(id);
+                this.fee_id.setText(dueTm.getSubscription_fee_id());
                 memberName.setText(dueTm.getMember_name());
                 date.setText(dueTm.getDate());
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }else if(id.startsWith("MF")){
             try {
-                dueTm = MfeeModel.getData(id);
-                this.fee_id.setText(dueTm.getId());
+                MembershipFeeDto dueTm = null;
+                dueTm = membershipFeeBO.getData(id);
+                this.fee_id.setText(dueTm.getMember_fee_id());
                 memberName.setText(dueTm.getMember_name());
                 date.setText(dueTm.getDate());
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException {
+    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         String id = fee_id.getText();
         if(id.startsWith("SF")){
-            boolean isDeleted = SfeeModel.deleteSubscriptionFee(id);
+            boolean isDeleted = subscriptionFeeBO.deleteSubFee(id);
             if(isDeleted){
                 new Alert(Alert.AlertType.CONFIRMATION, "Fee Deleted!").show();
                 SubscriptionFeeFormController.getInstance().getAllId();
@@ -56,7 +61,7 @@ public class MembershipDueBarFormController {
                 new Alert(Alert.AlertType.ERROR,"Doesn't Deleted!").show();
             }
         }else if(id.startsWith("MF")){
-            boolean isDeleted = MfeeModel.deleteMembershipFee(id);
+            boolean isDeleted = membershipFeeBO.deleteMemFee(id);
             if(isDeleted){
                 new Alert(Alert.AlertType.CONFIRMATION, "Fee Deleted!").show();
                // MembershipDuesFormController.getInstance().getAllId();

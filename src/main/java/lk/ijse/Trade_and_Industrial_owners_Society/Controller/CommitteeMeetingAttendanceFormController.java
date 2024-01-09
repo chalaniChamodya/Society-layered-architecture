@@ -6,6 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -21,33 +22,18 @@ public class CommitteeMeetingAttendanceFormController {
     public ComboBox cmbGenMetingId;
     public ComboBox cmbMemberID;
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
 
     public void initialize(){
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) {
-        btnSelected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnSelected(btnCancel);
-        btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnUnselected(btnAdd);
     }
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {

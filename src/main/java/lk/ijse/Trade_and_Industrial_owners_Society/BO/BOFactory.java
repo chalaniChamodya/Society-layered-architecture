@@ -1,6 +1,6 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.BO;
 
-import lk.ijse.TradeAndIndustryOwners.BO.Custom.Impl.*;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.*;
 
 public class BOFactory {
     private static BOFactory boFactory;

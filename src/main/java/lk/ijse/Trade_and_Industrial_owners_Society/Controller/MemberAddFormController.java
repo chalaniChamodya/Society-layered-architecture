@@ -9,9 +9,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MemberModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.SendText;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.QRGenerator;
 
@@ -40,42 +42,28 @@ public class MemberAddFormController {
     public JFXButton btnAdd;
     public JFXButton btnCancel;
     public AnchorPane pagingPane;
-    MemberModel memberModel = new MemberModel();
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
+    MemberBO memberBO = new MemberBoImpl();
 
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E7AD5D;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #533710;"
-        );
-    }
 
     public void initialize(){
-        btnUnselected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
         txtJoinedDate.requestFocus();
         generateNextMemberId();
     }
 
     private void generateNextMemberId()  {
         try {
-            lblMemberId.setText(memberModel.generateNextMemberId());
-        } catch (SQLException e) {
+            lblMemberId.setText(memberBO.generateNewMemberId());
+        } catch (SQLException | ClassNotFoundException e) {
 
         }
     }
 
     public void btnAddMemberOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, GeneralSecurityException, IOException, MessagingException {
-        btnSelected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
 
         boolean isMemberSaved = validateMember();
         if(isMemberSaved){
@@ -88,8 +76,8 @@ public class MemberAddFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) throws IOException {
-        btnSelected(btnCancel);
-        btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnUnselected(btnAdd);
         Navigation.switchPaging(pagingPane, "MembersForm.fxml");
     }
 
@@ -178,8 +166,7 @@ public class MemberAddFormController {
 
         MemberDto memberDto = new MemberDto(member_id, name_with_initials, full_name, business_address, personal_address,business_type, nic, email, date_of_birth, personal_contact_num, business_contact_num, admission_fee, joined_date);
 
-        MemberModel memberModel = new MemberModel();
-        boolean isSaved = memberModel.saveMember(memberDto);
+        boolean isSaved = memberBO.saveMember(memberDto);
 
         return isSaved;
     }

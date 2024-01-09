@@ -4,8 +4,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.FundingProgramModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Dto.TM.FundingProgramTm;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FundingProgramBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FundingProgramBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FundingProgramDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -18,28 +19,29 @@ public class FundingProgramBarFormController {
     public Label date;
     public ImageView btnDelete;
     public ImageView btnUpdate;
-    FundingProgramModel programModel = new FundingProgramModel();
+
+    FundingProgramBO fundingProgramBO = new FundingProgramBoImpl();
 
     public static void getId(String id){
         FundingProgramBarFormController.id = id;
     }
 
     public void setData(String id) {
-        FundingProgramTm programTm = null;
+        FundingProgramDto programTm = null;
         try {
-            programTm = programModel.getData(id);
+            programTm = fundingProgramBO.getData(id);
             this.programId.setText(programTm.getProgram_id());
             programName.setText(programTm.getProgram_name());
             date.setText(programTm.getDate());
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException {
+    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         String id = programId.getText();
-        boolean isDeleted = programModel.deleteFundingProgram(id);
+        boolean isDeleted = fundingProgramBO.deleteFundingProgram(id);
         if(isDeleted){
             new Alert(Alert.AlertType.CONFIRMATION,"Program Deleted !").show();
             FundingProgramFormController.getInstance().getAllId();

@@ -1,9 +1,9 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.BO.Custom.CommitteeMeetingBO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.CommitteeMeetingDAO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.Impl.CommitteeMeetingDaoImpl;
-import lk.ijse.TradeAndIndustryOwners.DTO.CommitteeMeetingDTO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.CommitteeMeetingDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.CommitteeMeetingDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMeetingDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,17 +12,17 @@ public class CommitteeMeetingBoImpl implements CommitteeMeetingBO {
     CommitteeMeetingDAO committeeMeetingDAO = new CommitteeMeetingDaoImpl();
 
     @Override
-    public CommitteeMeetingDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public CommitteeMeetingDto getData(String id) throws SQLException, ClassNotFoundException {
         return committeeMeetingDAO.getData(id);
     }
 
     @Override
-    public boolean saveCommitteeMeting(CommitteeMeetingDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveCommitteeMeting(CommitteeMeetingDto dto) throws SQLException, ClassNotFoundException {
         return committeeMeetingDAO.save(dto);
     }
 
     @Override
-    public boolean updateCommitteeMeeting(CommitteeMeetingDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean updateCommitteeMeeting(CommitteeMeetingDto dto) throws SQLException, ClassNotFoundException {
         return committeeMeetingDAO.update(dto);
     }
 

@@ -7,8 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FamilyMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FamilyMemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FamilyMemberDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.FamilyMemberModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -34,13 +37,14 @@ public class FamilyMemberUpdateFormController {
     public JFXButton btnCancel;
     private static FamilyMemberUpdateFormController controller;
 
-    FamilyMemberModel familyMemberModel = new FamilyMemberModel();
+    FamilyMemberBO familyMemberBO = new FamilyMemberBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
 
     public FamilyMemberUpdateFormController(){controller = this;}
 
     public static FamilyMemberUpdateFormController getInstance(){return controller;}
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setData();
         setFamilyMemberId();
         getAllId();
@@ -49,8 +53,8 @@ public class FamilyMemberUpdateFormController {
         lblIsAlive.setText("Yes");
     }
 
-    private void setDataInMemberIdComboBox() throws SQLException {
-        ArrayList<String> memberId = familyMemberModel.getAllMemberId();
+    private void setDataInMemberIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> memberId = memberBO.getAllMemberId();
         cmbMemberId.getItems().addAll(memberId);
     }
 
@@ -72,10 +76,9 @@ public class FamilyMemberUpdateFormController {
         lblFamMemId.setText(id);
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        FamilyMemberModel famMemModel = new FamilyMemberModel();
-        list = famMemModel.getAllFamilyMemberId();
+        list = familyMemberBO.getAllFamilyMemberId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -100,8 +103,8 @@ public class FamilyMemberUpdateFormController {
         FamilyMemberDto memberDto = null;
 
         try {
-            memberDto = familyMemberModel.getDataToUpdateForm(id);
-        } catch (SQLException e) {
+            memberDto = familyMemberBO.getAllFamilyMemberData(id);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         lblFamMemId.setText(id);
@@ -138,7 +141,7 @@ public class FamilyMemberUpdateFormController {
         memberDto.setRelationship(String.valueOf(cmbRelationship.getSelectionModel().getSelectedItem()));
         memberDto.setOccupation(txtOccupation.getText());
 
-        boolean isUpdated = familyMemberModel.updateFamilyMember(memberDto);
+        boolean isUpdated = familyMemberBO.updateFamilyMember(memberDto);
 
         if(isUpdated){
             new Alert(Alert.AlertType.CONFIRMATION," Family Member Updated !").show();

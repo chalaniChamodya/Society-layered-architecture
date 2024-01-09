@@ -10,11 +10,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMemberDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.CommitteeMemberModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
-import javax.print.attribute.standard.MediaSize;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,46 +38,29 @@ public class CommitteeMemberFormController {
     public AnchorPane crudPane;
     private static CommitteeMemberFormController controller;
 
-    CommitteeMemberModel committeeMemberModel = new CommitteeMemberModel();
+    CommitteeMemberBO committeeMemberBO = new CommitteeMemberBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
 
     public CommitteeMemberFormController(){controller = this;}
 
     public static CommitteeMemberFormController getInstance(){return controller;}
 
-
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         generateNextCommitteeMemberId();
         setDataInComboBox();
         setDataInMemberIdComboBox();
-        btnSelected(btnCommittee);
+        ChangeButton.btnSelected(btnCommittee);
     }
 
-    private void setDataInMemberIdComboBox() throws SQLException {
-        ArrayList<String> memberId = committeeMemberModel.getAllMemberId();
+    private void setDataInMemberIdComboBox() throws SQLException, ClassNotFoundException {
+        ArrayList<String> memberId = memberBO.getAllMemberId();
         cmbMemberId.getItems().addAll(memberId);
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        CommitteeMemberModel committeeModel = new CommitteeMemberModel();
-        list = committeeModel.getAllCommitteeMemberId();
+        list = committeeMemberBO.getAllCommitteeMemberId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -95,8 +81,8 @@ public class CommitteeMemberFormController {
         }
     }
 
-    private void generateNextCommitteeMemberId() throws SQLException {
-        lblComMemId.setText(committeeMemberModel.generateNextCommitteMemberId());
+    private void generateNextCommitteeMemberId() throws SQLException, ClassNotFoundException {
+        lblComMemId.setText(committeeMemberBO.generateNewCommitteeMemberId());
     }
 
     public void setDataInComboBox(){
@@ -114,33 +100,33 @@ public class CommitteeMemberFormController {
     public String getPosition(){return String.valueOf(cmbPosition.getSelectionModel().getSelectedItem());}
 
     public void btnMemberOnAction(ActionEvent actionEvent) throws IOException {
-        btnSelected(btnMember);
+        ChangeButton.btnSelected(btnMember);
         Navigation.switchPaging(pagingPane,"MembersForm.fxml");
     }
 
     public void btnFamilyOnAction(ActionEvent actionEvent) throws IOException {
-        btnSelected(btnFamily);
+        ChangeButton.btnSelected(btnFamily);
         Navigation.switchPaging(pagingPane,"FamilyMemberForm.fxml");
     }
 
     public void btnCommitteeOnAction(ActionEvent actionEvent) {
-        btnSelected(btnCommittee);
-        btnUnselected(btnMember);
-        btnUnselected(btnFamily);
-        btnUnselected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnCommittee);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnFamily);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
     }
 
-    public void cmbMemberIdOnAction(ActionEvent actionEvent) throws SQLException {
-        lblName.setText(committeeMemberModel.getName(String.valueOf(cmbMemberId.getValue())));
+    public void cmbMemberIdOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        lblName.setText(memberBO.getMemberName(String.valueOf(cmbMemberId.getValue())));
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        btnSelected(btnAdd);
-        btnSelected(btnCommittee);
-        btnUnselected(btnMember);
-        btnUnselected(btnCancel);
-        btnUnselected(btnFamily);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnSelected(btnCommittee);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnUnselected(btnFamily);
 
         String com_mem_id = lblComMemId.getText();
         String member_id = cmbMemberId.getId();
@@ -150,7 +136,7 @@ public class CommitteeMemberFormController {
 
         CommitteeMemberDto committeeMemberDto = new CommitteeMemberDto(com_mem_id,member_id, name, position, date);
 
-        boolean isSaved = committeeMemberModel.saveCommitteeMember(committeeMemberDto);
+        boolean isSaved = committeeMemberBO.saveCommitteeMember(committeeMemberDto);
 
         if(isSaved){
             clearFeilds();
@@ -168,11 +154,11 @@ public class CommitteeMemberFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnSelected(btnCancel);
-        btnSelected(btnCommittee);
-        btnUnselected(btnMember);
-        btnUnselected(btnFamily);
-        btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnSelected(btnCommittee);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnFamily);
+        ChangeButton.btnUnselected(btnAdd);
     }
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {

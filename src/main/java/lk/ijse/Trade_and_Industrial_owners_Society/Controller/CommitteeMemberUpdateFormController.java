@@ -10,8 +10,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMemberBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMemberDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.CommitteeMemberModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -37,39 +39,22 @@ public class CommitteeMemberUpdateFormController {
 
     private static CommitteeMemberUpdateFormController controller;
 
-    CommitteeMemberModel memberModel = new CommitteeMemberModel();
+    CommitteeMemberBO committeeMemberBO = new CommitteeMemberBoImpl();
 
     public CommitteeMemberUpdateFormController(){controller = this;}
 
     public static CommitteeMemberUpdateFormController getInstance(){return controller;}
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setData();
         getAllId();
-        btnSelected(btnCommittee);
+        ChangeButton.btnSelected(btnCommittee);
         setDataInComboBox();
     }
 
-    private void getAllId() throws SQLException {
+    private void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        CommitteeMemberModel committeeModel = new CommitteeMemberModel();
-        list = committeeModel.getAllCommitteeMemberId();
+        list = committeeMemberBO.getAllCommitteeMemberId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -106,8 +91,8 @@ public class CommitteeMemberUpdateFormController {
         CommitteeMemberDto memberDto = null;
 
         try {
-            memberDto = memberModel.getDataToUpdateForm(id);
-        } catch (SQLException e) {
+            memberDto = committeeMemberBO.getData(id);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         lblComMemId.setText(id);
@@ -149,7 +134,7 @@ public class CommitteeMemberUpdateFormController {
         memberDto.setDate(String.valueOf(dateDate.getValue()));
         memberDto.setPosition(String.valueOf(cmbPosition.getSelectionModel().getSelectedItem()));
 
-        boolean isUpdated = memberModel.updateCommitteeMember(memberDto);
+        boolean isUpdated = committeeMemberBO.updateCommitteeMember(memberDto);
 
         if(isUpdated){
             new Alert(Alert.AlertType.CONFIRMATION," Committee Member Updated !").show();

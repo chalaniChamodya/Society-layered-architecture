@@ -10,8 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FundingProgramBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FundingProgramBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FundingProgramDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.FundingProgramModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -34,18 +35,18 @@ public class FundingProgramUpdateFormController {
     public TextField txtDescription;
     public JFXButton btnUpdate;
     public JFXButton btnCancel;
-    FundingProgramModel programModel = new FundingProgramModel();
 
-    public void initialize() throws SQLException {
+    FundingProgramBO fundingProgramBO = new FundingProgramBoImpl();
+
+    public void initialize() throws SQLException, ClassNotFoundException {
         setData();
         setProgramId();
         getAllId();
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        FundingProgramModel programModel = new FundingProgramModel();
-        list = programModel.getAllProgramId();
+        list = fundingProgramBO.getAllFundingProgramId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -73,8 +74,8 @@ public class FundingProgramUpdateFormController {
     private void setData() {
         FundingProgramDto programDto = null;
         try {
-            programDto = programModel.getDataToUpdateForm(id);
-        } catch (SQLException e) {
+            programDto = fundingProgramBO.getData(id);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -97,7 +98,7 @@ public class FundingProgramUpdateFormController {
     public void btnFundingProgramOnAction(ActionEvent actionEvent) {
     }
 
-    public void btnUpdateOnAction(ActionEvent actionEvent) throws IOException, SQLException {
+    public void btnUpdateOnAction(ActionEvent actionEvent) throws IOException, SQLException, ClassNotFoundException {
         FundingProgramDto programDto = new FundingProgramDto();
         programDto.setProgram_id(id);
         programDto.setProgram_name(txtProgramName.getText());
@@ -107,7 +108,7 @@ public class FundingProgramUpdateFormController {
         programDto.setIncome(txtIncome.getText());
         programDto.setExpenditure(txtExpenditure.getText());
 
-        boolean isUpdated = programModel.updateFundingProgram(programDto);
+        boolean isUpdated = fundingProgramBO.updateFundingProgram(programDto);
         if(isUpdated){
             clearFeilds();
             new Alert(Alert.AlertType.CONFIRMATION,"Program Updated!").show();

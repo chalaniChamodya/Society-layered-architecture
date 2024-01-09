@@ -7,7 +7,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.UserModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.UserBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.UserBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class LoginFormController {
     public PasswordField txtPassword;
     public JFXButton btnLogin;
 
-    UserModel userModel = new UserModel();
+    UserBO userBO = new UserBoImpl();
 
     void btnSelected(JFXButton btn){
         btn.setStyle(
@@ -32,11 +33,11 @@ public class LoginFormController {
     public void btnLoginOnAction(ActionEvent actionEvent) {
         btnSelected(btnLogin);
         try {
-            if (userModel.checkUsernameAndPassword(txtUsername.getText(), txtPassword.getText()).equals("Chairman")){
+            if (userBO.checkUsernameAndPassword(txtUsername.getText(), txtPassword.getText()).equals("Chairman")){
                 Navigation.switchNavigation("GlobalForm.fxml", actionEvent);
-            }else if(userModel.checkUsernameAndPassword(txtUsername.getText(), txtPassword.getText()).equals("Secretary")){
+            }else if(userBO.checkUsernameAndPassword(txtUsername.getText(), txtPassword.getText()).equals("Secretary")){
                 Navigation.switchNavigation("GlobalForm.fxml", actionEvent);
-            }else if(userModel.checkUsernameAndPassword(txtUsername.getText(), txtPassword.getText()).equals("Treasurer")){
+            }else if(userBO.checkUsernameAndPassword(txtUsername.getText(), txtPassword.getText()).equals("Treasurer")){
                 Navigation.switchNavigation("GlobalForm.fxml", actionEvent);
             }else{
                 new Alert(Alert.AlertType.ERROR, "Incorrect Username or Password !").show();

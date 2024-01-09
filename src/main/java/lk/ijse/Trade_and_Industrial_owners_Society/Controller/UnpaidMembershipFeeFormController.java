@@ -6,8 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.DashboardModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MemberModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MembershipFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.SubscriptionFeeBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MembershipFeeBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SubscriptionFeeBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.SendText;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
@@ -16,6 +20,8 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton.btnSelected;
 
 public class UnpaidMembershipFeeFormController {
     public AnchorPane pagingPane;
@@ -27,32 +33,16 @@ public class UnpaidMembershipFeeFormController {
 
     public static UnpaidMembershipFeeFormController getInstance(){return controller;}
 
-    MemberModel memberModel = new MemberModel();
+    MemberBO memberBO = new MemberBoImpl();
+    MembershipFeeBO membershipFeeBO = new MembershipFeeBoImpl();
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
     }
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        DashboardModel dashboardModel = new DashboardModel();
-        list = dashboardModel.getAllUnpaidMembershipFeeId();
+        list = membershipFeeBO.getAllUnpaidMembershipFeeId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -73,9 +63,9 @@ public class UnpaidMembershipFeeFormController {
         }
     }
 
-    public void btnInformAllOnAction(ActionEvent actionEvent) throws SQLException, GeneralSecurityException, IOException, MessagingException {
+    public void btnInformAllOnAction(ActionEvent actionEvent) throws SQLException, GeneralSecurityException, IOException, MessagingException, ClassNotFoundException {
         btnSelected(btnInformAll);
-        ArrayList<String> emailList = memberModel.getAllMemberEmailAddress();
+        ArrayList<String> emailList = memberBO.getAllMemberEmailAddress_mem();
         System.out.println(emailList);
 
         for (int i = 0; i < emailList.size(); i++) {

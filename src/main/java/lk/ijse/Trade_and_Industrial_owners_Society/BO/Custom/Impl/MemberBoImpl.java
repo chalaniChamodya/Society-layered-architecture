@@ -1,29 +1,31 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.BO.Custom.MemberBO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.MemberDAO;
-import lk.ijse.TradeAndIndustryOwners.DAO.DAOFactory;
-import lk.ijse.TradeAndIndustryOwners.DTO.MemberDTO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MemberDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MemberBoImpl implements MemberBO {
     MemberDAO memberDAO = (MemberDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MEMBER);
 
 
     @Override
-    public MemberDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public MemberDto getData(String id) throws SQLException, ClassNotFoundException {
         return memberDAO.getData(id);
     }
 
     @Override
-    public boolean saveMember(MemberDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveMember(MemberDto dto) throws SQLException, ClassNotFoundException {
         return memberDAO.save(dto);
     }
 
     @Override
-    public boolean updateMember(MemberDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean updateMember(MemberDto dto) throws SQLException, ClassNotFoundException {
         return memberDAO.update(dto);
     }
 
@@ -60,5 +62,15 @@ public class MemberBoImpl implements MemberBO {
     @Override
     public ArrayList<String> getAllMemberEmailAddress_mem() throws SQLException, ClassNotFoundException {
         return memberDAO.getAllMemberEmailAddress();
+    }
+
+    @Override
+    public ArrayList<String> search(String searchTerm) throws SQLException, ClassNotFoundException {
+        return memberDAO.search(searchTerm);
+    }
+
+    @Override
+    public Map<String, LocalDate> calculateMemberDuration() throws SQLException, ClassNotFoundException {
+        return memberDAO.calculateMemberDuration();
     }
 }

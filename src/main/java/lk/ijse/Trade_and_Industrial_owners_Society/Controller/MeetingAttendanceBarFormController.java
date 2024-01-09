@@ -4,7 +4,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MeetingAttendanceModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MeetingAttendanceBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MeetingAttendanceBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MeetingAttendanceDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.TM.MeetingAttendanceTm;
 
 import java.sql.SQLException;
@@ -15,12 +17,11 @@ public class MeetingAttendanceBarFormController {
     public Label memberName;
     public ImageView btnDelete;
     public ImageView btnUpdate;
-    MeetingAttendanceModel attendanceModel = new MeetingAttendanceModel();
+    MeetingAttendanceBO meetingAttendanceBO = new MeetingAttendanceBoImpl();
 
-    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException {
+    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         String meetingId = MeetingId.getText();
-        String memberId = MemberID.getText();
-        boolean isDeleted = attendanceModel.deleteGeneralMeetingAttendance(meetingId,memberId);
+        boolean isDeleted = meetingAttendanceBO.deleteAttendance(meetingId, memberName.getText());
 
         if(isDeleted){
             new Alert(Alert.AlertType.CONFIRMATION,"Attendance Deleted !").show();
@@ -35,13 +36,13 @@ public class MeetingAttendanceBarFormController {
     }
 
     public void setDataInGeneral(String id) {
-        MeetingAttendanceTm attendanceTm = null;
+        MeetingAttendanceDto attendanceTm = null;
         try {
-            attendanceTm = attendanceModel.getGeneralData(id);
+            attendanceTm = meetingAttendanceBO.getData(id);
             this.MeetingId.setText(attendanceTm.getMeeting_id());
             MemberID.setText(attendanceTm.getMember_id());
-            memberName.setText(attendanceTm.getName());
-        } catch (SQLException e) {
+            memberName.setText(attendanceTm.getMember_name());
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

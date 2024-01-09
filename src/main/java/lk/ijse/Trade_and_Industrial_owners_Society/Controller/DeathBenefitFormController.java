@@ -7,15 +7,20 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.DeathBenefitBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FamilyMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.DeathBenefitBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FamilyMemberBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.DonationDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.DonationModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.FamilyMemberModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import static lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton.btnSelected;
+import static lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton.btnUnselected;
 
 public class DeathBenefitFormController {
     public AnchorPane pagingPane;
@@ -31,45 +36,28 @@ public class DeathBenefitFormController {
     public JFXButton btnCancel;
     private static DeathBenefitFormController controller;
 
-    DonationModel donationModel = new DonationModel();
-    FamilyMemberModel familyMemberModel = new FamilyMemberModel();
+    DeathBenefitBO deathBenefitBO = new DeathBenefitBoImpl();
+    FamilyMemberBO familyMemberBO = new FamilyMemberBoImpl();
 
     public DeathBenefitFormController(){controller = this;}
 
     public static DeathBenefitFormController getInstance(){return controller;}
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         generateNextDeathBenefitId();
         btnSelected(btnDeathBenefit);
         setdataInFamMemId();
     }
 
-    private void setdataInFamMemId() throws SQLException {
-        ArrayList<String> famMemberId = donationModel.getAllFamMemberId();
+    private void setdataInFamMemId() throws SQLException, ClassNotFoundException {
+        ArrayList<String> famMemberId = familyMemberBO.getAllFamilyMemberId();
         txtFamilyMemberId.getItems().addAll(famMemberId);
     }
 
-    private void getAllId() throws SQLException {
+    private void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        DonationModel donationModel = new DonationModel();
-        list = donationModel.getAllDeathBenefitId();
+        list = deathBenefitBO.getAllId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -92,8 +80,8 @@ public class DeathBenefitFormController {
 
     private void generateNextDeathBenefitId() {
         try {
-            lblBenefitId.setText(donationModel.generateNextDeathBenefitId());
-        } catch (SQLException e) {
+            lblBenefitId.setText(deathBenefitBO.generateNewId());
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -128,7 +116,7 @@ public class DeathBenefitFormController {
 
         DonationDto donationDto = new DonationDto(Death_benefit_id, date, amount,family_member_id);
         try {
-            boolean isSaved = donationModel.isSaved(donationDto);
+            boolean isSaved = deathBenefitBO.saveTransaction(donationDto);
             if(isSaved){
                 clearFields();
                 generateNextDeathBenefitId();

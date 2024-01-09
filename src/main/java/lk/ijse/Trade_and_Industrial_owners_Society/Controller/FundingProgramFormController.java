@@ -10,8 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FundingProgramBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FundingProgramBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FundingProgramDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.FundingProgramModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -34,46 +36,30 @@ public class FundingProgramFormController {
     public JFXButton btnCancel;
 
     private static  FundingProgramFormController controller;
-    FundingProgramModel fundingProgramModel = new FundingProgramModel();
+
+    FundingProgramBO programBO = new FundingProgramBoImpl();
 
     public FundingProgramFormController(){controller = this;}
 
     public static  FundingProgramFormController getInstance(){return controller;}
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         generateNextFundingProgramId();
-        btnSelected(btnFundingProgram);
+        ChangeButton.btnSelected(btnFundingProgram);
     }
 
     public void generateNextFundingProgramId() {
         try {
-            lblProgramId.setText(fundingProgramModel.generateNextFundingProgramId());
-        } catch (SQLException e) {
+            lblProgramId.setText(programBO.generateNewFundingProgramId());
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        FundingProgramModel programModel = new FundingProgramModel();
-        list = programModel.getAllProgramId();
+        list = programBO.getAllFundingProgramId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -99,17 +85,17 @@ public class FundingProgramFormController {
     }
 
     public void btnFundingProgramOnAction(ActionEvent actionEvent) {
-        btnSelected(btnFundingProgram);
-        btnUnselected(btnSponsor);
-        btnUnselected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnFundingProgram);
+        ChangeButton.btnUnselected(btnSponsor);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        btnSelected(btnAdd);
-        btnUnselected(btnCancel);
-        btnSelected(btnFundingProgram);
-        btnUnselected(btnSponsor);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnFundingProgram);
+        ChangeButton.btnUnselected(btnSponsor);
 
         String program_id = lblProgramId.getText();
         String program_name = txtProgramName.getText();
@@ -121,7 +107,7 @@ public class FundingProgramFormController {
 
         FundingProgramDto dto = new FundingProgramDto(program_id, program_name, description, date, location, income, expenditure);
 
-        boolean isSaved = fundingProgramModel.isSaved(dto);
+        boolean isSaved = programBO.saveFundingProgram(dto);
 
         if(isSaved){
             clearFields();
@@ -139,10 +125,10 @@ public class FundingProgramFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnSelected(btnCancel);
-        btnUnselected(btnAdd);
-        btnSelected(btnFundingProgram);
-        btnUnselected(btnSponsor);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnSelected(btnFundingProgram);
+        ChangeButton.btnUnselected(btnSponsor);
 
         clearFields();
     }

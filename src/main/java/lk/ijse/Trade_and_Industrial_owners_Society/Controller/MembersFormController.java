@@ -13,8 +13,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DbConnection.DBConnection;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.MemberModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRDesignQuery;
@@ -38,48 +40,22 @@ public class MembersFormController {
     private static MembersFormController controller;
     public JFXButton btnDetailReport;
 
+    MemberBO memberBO = new MemberBoImpl();
+
     public MembersFormController(){controller = this;}
 
     public static MembersFormController getInstance() {
         return controller;
     }
 
-    void btnAddSelected(JFXButton btn, Label add, ImageView img, String path){
-        btn.setStyle(
-                "-fx-background-color: #E7AD5D;"+
-                        "-fx-background-radius: 15px;"
-        );
-        add.setStyle("-fx-font-size: 24px;" +
-                "-fx-text-fill: #533710;"
-        );
-        img.setImage(new Image("Assets/Imgs/"+ path));
-    }
-
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
-
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
-        btnSelected(btnMember);
+        ChangeButton.btnSelected(btnMember);
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        MemberModel memberModel = new MemberModel();
-        list = memberModel.getAllMemberId();
+        list = memberBO.getAllMemberId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -110,19 +86,19 @@ public class MembersFormController {
     }
 
     public void btnMemberOnAction(ActionEvent actionEvent) {
-        btnSelected(btnMember);
+        ChangeButton.btnSelected(btnMember);
     }
 
     public void btnCommitteeOnAction(ActionEvent actionEvent) throws IOException {
-        btnSelected(btnCommittee);
-        btnUnselected(btnMember);
-        btnUnselected(btnFamily);
+        ChangeButton.btnSelected(btnCommittee);
+        ChangeButton.btnUnselected(btnMember);
+        ChangeButton.btnUnselected(btnFamily);
        // btnUnselected(btnAdd);
         Navigation.switchPaging(pagingPane, "CommitteeMemberForm.fxml");
     }
 
     public void btnReportOnAction(ActionEvent actionEvent) {
-        btnSelected(btnDetailReport);
+        ChangeButton.btnSelected(btnDetailReport);
         InputStream resourceAsStream = getClass().getResourceAsStream("/Reports/MemberDetails.jrxml");
         JasperDesign load = null;
         try {

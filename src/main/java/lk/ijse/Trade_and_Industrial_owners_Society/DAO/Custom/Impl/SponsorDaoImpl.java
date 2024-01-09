@@ -1,8 +1,8 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.SponsorDAO;
-import lk.ijse.TradeAndIndustryOwners.DTO.SponsorDTO;
-import lk.ijse.TradeAndIndustryOwners.Utill.SQLUtill;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SponsorDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SponsorDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 public class SponsorDaoImpl implements SponsorDAO {
     @Override
-    public SponsorDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public SponsorDto getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM sponsor WHERE sponsor_id = ?", id);
 
-        SponsorDTO sponsorTm = new SponsorDTO();
+        SponsorDto sponsorTm = new SponsorDto();
 
         if(resultSet.next()){
             sponsorTm.setSponsor_id(resultSet.getString(1));
@@ -24,12 +24,12 @@ public class SponsorDaoImpl implements SponsorDAO {
     }
 
     @Override
-    public ArrayList<SponsorDTO> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<SponsorDto> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(SponsorDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean save(SponsorDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO sponsor VALUES (?, ?, ?, ?, ?, ?)",
                 dto.getSponsor_id(),
                 dto.getProgram_id(),
@@ -41,7 +41,7 @@ public class SponsorDaoImpl implements SponsorDAO {
     }
 
     @Override
-    public boolean update(SponsorDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(SponsorDto dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("UPDATE sponsor SET " +
                 "program_id = ?, " +
                 "name = ?, " +

@@ -4,8 +4,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.FamilyMemberModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Dto.TM.FamilyMemberTm;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FamilyMemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.FamilyMemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FamilyMemberDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -19,30 +20,31 @@ public class FamilyMemberBarFormController {
     public Label isAlive;
     public ImageView btnDelete;
     public ImageView btnUpdate;
-    FamilyMemberModel familyMemberModel = new FamilyMemberModel();
+
+    FamilyMemberBO familyMemberBO = new FamilyMemberBoImpl();
 
     public static void getId(String id){
         FamilyMemberBarFormController.id = id;
     }
 
     public void setData(String id) {
-        FamilyMemberTm familyTm = null;
+        FamilyMemberDto familyTm = null;
 
         try {
-            familyTm = familyMemberModel.getData(id);
+            familyTm = familyMemberBO.getData(id);
             this.memberId.setText(familyTm.getMember_id());
-            fam_mem_Id.setText(familyTm.getId());
+            fam_mem_Id.setText(familyTm.getFamily_mem_id());
             relationship.setText(familyTm.getRelationship());
             isAlive.setText(familyTm.getIsAlive());
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException {
+    public void btnDeleteOnAction(MouseEvent mouseEvent) throws SQLException, ClassNotFoundException {
         String id = fam_mem_Id.getText();
-        boolean isDeleted = familyMemberModel.deleteFamilyMember(id);
+        boolean isDeleted = familyMemberBO.deleteFamilyMember(id);
 
         if(isDeleted){
             new Alert(Alert.AlertType.CONFIRMATION,"member deleted !").show();

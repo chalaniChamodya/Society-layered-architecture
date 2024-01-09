@@ -1,8 +1,6 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.DAO;
 
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.Impl.*;
-import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.CommitteeMeetingDaoImpl;
-import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.MemberDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.*;
 
 public class DAOFactory {
     private static DAOFactory daoFactory;
@@ -23,7 +21,7 @@ public class DAOFactory {
             case MEMBER:
                 return new MemberDaoImpl();
             case COMMITTEE_MEMBER:
-                return new CommitteeMeetingDaoImpl();
+                return new CommitteeMemberDaoImpl();
             case FAMILY_MEMBER:
                 return new FamilyMemberDaoImpl();
             case GENERAL_MEETING:

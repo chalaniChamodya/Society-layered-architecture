@@ -1,14 +1,11 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.DeathBenefitDAO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.FamilyMemberDAO;
-import lk.ijse.TradeAndIndustryOwners.DTO.DonationDTO;
-import lk.ijse.TradeAndIndustryOwners.Utill.SQLUtill;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.DeathBenefitDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FamilyMemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.DonationDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,44 +32,12 @@ public class DeathBenefitDaoImpl implements DeathBenefitDAO {
 
     @Override
     public boolean save(DonationDto dto) throws SQLException, ClassNotFoundException {
-        FamilyMemberDAO familyMemberDAO = new FamilyMemberDaoImpl();
-
-        boolean result = false;
-        try {
-            connection.setAutoCommit(false);
-
-            boolean isSavedDonation = saveDonation(dto);
-           // System.out.println(isSavedDonation);
-            connection.commit();
-            if(isSavedDonation){
-                boolean isUpdated = familyMemberDAO.updateIsAlive(dto.getFamily_member_id());
-                if(isUpdated){
-                    connection.commit();
-                    result = true;
-                }
-            }
-        }catch (SQLException e){
-            connection.rollback();
-        }finally {
-            connection.setAutoCommit(true);
-        }
-        return result;
-    }
-
-    public boolean saveDonation(DonationDto donationDto) throws SQLException {
-        System.out.println(donationDto);
-
-        try {
-            return SQLUtill.execute("INSERT INTO death_benefit VALUES(?, ?, ?, ?)",
-                    donationDto.getDonation_id(),
-                    donationDto.getDate(),
-                    donationDto.getAmount(),
-                    donationDto.getFamily_member_id()
-            );
-        }catch (Exception e){
-            System.out.println(e);
-        }
-        return false;
+        return SQLUtill.execute("INSERT INTO death_benefit VALUES(?, ?, ?, ?)",
+                dto.getDonation_id(),
+                dto.getDate(),
+                dto.getAmount(),
+                dto.getFamily_member_id()
+        );
     }
 
     @Override

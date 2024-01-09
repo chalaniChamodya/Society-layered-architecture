@@ -1,9 +1,9 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 
-import lk.ijse.TradeAndIndustryOwners.BO.Custom.FundingProgramBO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.FundingProgramDAO;
-import lk.ijse.TradeAndIndustryOwners.DAO.Custom.Impl.FundingProgramDaoImpl;
-import lk.ijse.TradeAndIndustryOwners.DTO.FundingProgramDTO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FundingProgramBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FundingProgramDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FundingProgramDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FundingProgramDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,17 +12,17 @@ public class FundingProgramBoImpl implements FundingProgramBO {
     FundingProgramDAO fundingProgramDAO = new FundingProgramDaoImpl();
 
     @Override
-    public FundingProgramDTO getData(String id) throws SQLException, ClassNotFoundException {
+    public FundingProgramDto getData(String id) throws SQLException, ClassNotFoundException {
         return fundingProgramDAO.getData(id);
     }
 
     @Override
-    public boolean saveFundingProgram(FundingProgramDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean saveFundingProgram(FundingProgramDto dto) throws SQLException, ClassNotFoundException {
         return fundingProgramDAO.save(dto);
     }
 
     @Override
-    public boolean updateFundingProgram(FundingProgramDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean updateFundingProgram(FundingProgramDto dto) throws SQLException, ClassNotFoundException {
         return fundingProgramDAO.update(dto);
     }
 

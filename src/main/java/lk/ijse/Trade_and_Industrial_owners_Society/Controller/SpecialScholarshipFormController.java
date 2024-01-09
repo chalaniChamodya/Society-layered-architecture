@@ -10,9 +10,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MeetingAttendanceBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.SpecialScholarshipBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MeetingAttendanceBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SpecialScholarshipBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SpecialScholDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.DonationModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.SpecialScholModel;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -35,35 +40,21 @@ public class SpecialScholarshipFormController {
     public JFXButton btnAdd;
     public JFXButton btnCancel;
     public TextField txtMemberName;
-    SpecialScholModel scholModel = new SpecialScholModel();
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
+    SpecialScholarshipBO scholarshipBO = new SpecialScholarshipBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
+    MeetingAttendanceBO meetingAttendanceBO = new MeetingAttendanceBoImpl();
 
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         selectEligibleMembers();
-        btnSelected(btnSpecialSchol);
+        ChangeButton.btnSelected(btnSpecialSchol);
         generateNextScholId();
         getAllId();
     }
 
-    private void getAllId() throws SQLException {
+    private void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        SpecialScholModel scholModel = new SpecialScholModel();
-        list = scholModel.getAllScholId();
+        list = scholarshipBO.getAllSpecialScholId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -84,16 +75,16 @@ public class SpecialScholarshipFormController {
         }
     }
 
-    private void generateNextScholId() throws SQLException {
-        lblBenefitId.setText(scholModel.generateNextScholId());
+    private void generateNextScholId() throws SQLException, ClassNotFoundException {
+        lblBenefitId.setText(scholarshipBO.generateNewSpecialScholId());
     }
 
-    private void selectEligibleMembers() throws SQLException {
+    private void selectEligibleMembers() throws SQLException, ClassNotFoundException {
         LocalDate currentDate = LocalDate.now();
         ArrayList<String> eligibleMemberList = new ArrayList<>();
 
 
-        Map<String, LocalDate> memberJoinedDates = scholModel.calculateMemberDuration();
+        Map<String, LocalDate> memberJoinedDates = memberBO.calculateMemberDuration();
 
         LocalDate joined_date ;
         for(Map.Entry<String,LocalDate> entry : memberJoinedDates.entrySet()){
@@ -101,7 +92,7 @@ public class SpecialScholarshipFormController {
             joined_date = entry.getValue();
         }
 
-        Map<String, Double> meetingAttendance = scholModel.calculateMeetingAttendance();
+        Map<String, Double> meetingAttendance = meetingAttendanceBO.calculateMeetingAttendance();
         for (Map.Entry<String, Double> entry : meetingAttendance.entrySet()){
             String memberId = entry.getKey();
             Double attendance = entry.getValue();
@@ -147,11 +138,11 @@ public class SpecialScholarshipFormController {
     }
 
     public void btnSpecialScholOnAction(ActionEvent actionEvent) {
-        btnSelected(btnSpecialSchol);
-        btnUnselected(btnDeathBenefit);
-        btnUnselected(btnScholarship);
-        btnUnselected(btnAdd);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnSpecialSchol);
+        ChangeButton.btnUnselected(btnDeathBenefit);
+        ChangeButton.btnUnselected(btnScholarship);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnCancel);
     }
 
     public void btnScholarshipOnAction(ActionEvent actionEvent) throws IOException {
@@ -163,11 +154,11 @@ public class SpecialScholarshipFormController {
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
-        btnSelected(btnSpecialSchol);
-        btnSelected(btnAdd);
-        btnUnselected(btnDeathBenefit);
-        btnUnselected(btnScholarship);
-        btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnSpecialSchol);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnUnselected(btnDeathBenefit);
+        ChangeButton.btnUnselected(btnScholarship);
+        ChangeButton.btnUnselected(btnCancel);
 
         String schoId = lblBenefitId.getText();
         String memberId = String.valueOf(txtMemberId.getValue());
@@ -176,7 +167,7 @@ public class SpecialScholarshipFormController {
         String amount = txtAmount.getText();
 
         SpecialScholDto scholDto = new SpecialScholDto(schoId, memberId, name, date, amount);
-        boolean isSaved = scholModel.isSaved(scholDto);
+        boolean isSaved = scholarshipBO.saveSpecialSchol(scholDto);
         if(isSaved){
            // clearFeilds();
             generateNextScholId();
@@ -185,11 +176,11 @@ public class SpecialScholarshipFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnSelected(btnSpecialSchol);
-        btnUnselected(btnAdd);
-        btnUnselected(btnDeathBenefit);
-        btnUnselected(btnScholarship);
-        btnSelected(btnCancel);
+        ChangeButton.btnSelected(btnSpecialSchol);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnDeathBenefit);
+        ChangeButton.btnUnselected(btnScholarship);
+        ChangeButton.btnSelected(btnCancel);
     }
 
     public void btnBackOnAction(ActionEvent actionEvent) throws IOException {

@@ -10,11 +10,16 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMeetingBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.GeneralMeetingBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMeetingDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.GeneralMeetingDto;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.CommitteeMeetingModel;
-import lk.ijse.Trade_and_Industrial_owners_Society.Model.GeneralMeetingModel;
 import lk.ijse.Trade_and_Industrial_owners_Society.SendText;
+import lk.ijse.Trade_and_Industrial_owners_Society.Utill.ChangeButton;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import javax.mail.MessagingException;
@@ -42,8 +47,9 @@ public class CommitteeMeetingFormController {
     public String meetingId;
     private static CommitteeMeetingFormController controller;
 
-    GeneralMeetingModel generalMeetingModel = new GeneralMeetingModel();
-    CommitteeMeetingModel committeeMeetingModel = new CommitteeMeetingModel();
+    GeneralMeetingBO generalMeetingBO = new GeneralMeetingBoImpl();
+    CommitteeMeetingBO committeeMeetingBO = new CommitteeMeetingBoImpl();
+    MemberBO memberBO = new MemberBoImpl();
 
     public CommitteeMeetingFormController(){
         controller = this;
@@ -53,26 +59,11 @@ public class CommitteeMeetingFormController {
         return controller;
     }
 
-    void btnSelected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #533710;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #FFFFFF;"
-        );
-    }
 
-    void btnUnselected(JFXButton btn){
-        btn.setStyle(
-                "-fx-background-color: #E8E8E8;"+
-                        "-fx-background-radius: 12px;"+
-                        "-fx-text-fill: #727374;"
-        );
-    }
-
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         getAllId();
         setDataInComboBox();
-        btnSelected(btnCommittee);
+        ChangeButton.btnSelected(btnCommittee);
     }
 
     private void setDataInComboBox() {
@@ -90,21 +81,20 @@ public class CommitteeMeetingFormController {
     private void generateNextMeetingId(String meetingType) {
         try {
             if (meetingType.equals("General Meeting")) {
-                meetingId = generalMeetingModel.generateNextGeneralMeetingID();
+                meetingId = generalMeetingBO.generateNewGeneralMeetingId();
                 txtMeetingId.setText(meetingId);
             }else if(meetingType.equals("Committee Meeting")){
-                meetingId = committeeMeetingModel.generateNextCommitteeMeetingId();
+                meetingId = committeeMeetingBO.generateNewCommitteeMetingId();
                 txtMeetingId.setText(meetingId);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void getAllId() throws SQLException {
+    public void getAllId() throws SQLException, ClassNotFoundException {
         ArrayList<String> list = null;
-        CommitteeMeetingModel meetingModel = new CommitteeMeetingModel();
-        list = meetingModel.getAllMeetingId();
+        list = committeeMeetingBO.getAllCommitteeMeetingId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
@@ -126,11 +116,11 @@ public class CommitteeMeetingFormController {
     }
 
     public void btnCommitteeOnAction(ActionEvent actionEvent) {
-        btnUnselected(btnAdd);
-        btnUnselected(btnGeneral);
-        btnUnselected(btnCancel);
-        btnSelected(btnCommittee);
-        btnUnselected(btnCommitteeAttendance);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnGeneral);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnCommittee);
+        ChangeButton.btnUnselected(btnCommitteeAttendance);
     }
 
     public void btnGeneralOnAction(ActionEvent actionEvent) throws IOException {
@@ -142,11 +132,11 @@ public class CommitteeMeetingFormController {
     }
 
     public void btnAddOnAction(ActionEvent actionEvent) throws SQLException, GeneralSecurityException, IOException, MessagingException, ClassNotFoundException {
-        btnSelected(btnAdd);
-        btnUnselected(btnGeneral);
-        btnUnselected(btnCancel);
-        btnSelected(btnCommittee);
-        btnUnselected(btnCommitteeAttendance);
+        ChangeButton.btnSelected(btnAdd);
+        ChangeButton.btnUnselected(btnGeneral);
+        ChangeButton.btnUnselected(btnCancel);
+        ChangeButton.btnSelected(btnCommittee);
+        ChangeButton.btnUnselected(btnCommitteeAttendance);
 
         String meetingType = getMeetingType();
         if(meetingType.equals("General Meeting")){
@@ -158,7 +148,7 @@ public class CommitteeMeetingFormController {
 
             GeneralMeetingDto generalMeetingDto = new GeneralMeetingDto(id, date, time, description, location);
 
-            boolean isSaved = generalMeetingModel.isSaved(generalMeetingDto);
+            boolean isSaved = generalMeetingBO.saveGeneralMeeting(generalMeetingDto);
 
             //String email= null;
 
@@ -167,7 +157,7 @@ public class CommitteeMeetingFormController {
             if(isSaved){
                 new Alert(Alert.AlertType.CONFIRMATION,"meeting Saved!").show();
                 getAllId();
-                ArrayList<String> emailList = generalMeetingModel.getMailAddress();
+                ArrayList<String> emailList = memberBO.getAllMemberEmailAddress_mem();
                 System.out.println(emailList.size());
                 for (int i = 0; i < emailList.size(); i++) {
                     String email = emailList.get(i);
@@ -186,7 +176,7 @@ public class CommitteeMeetingFormController {
 
             CommitteeMeetingDto committeeMeetingDto = new CommitteeMeetingDto(id, date, time, description, location);
 
-            boolean isSaved = committeeMeetingModel.isSaved(committeeMeetingDto);
+            boolean isSaved = committeeMeetingBO.saveCommitteeMeting(committeeMeetingDto);
 
             if(isSaved){
                 // Navigation.switchNavigation("CommitteeMeetingForm.fxml", actionEvent);
@@ -204,11 +194,11 @@ public class CommitteeMeetingFormController {
     }
 
     public void btnCancelOnAction(ActionEvent actionEvent) {
-        btnUnselected(btnAdd);
-        btnUnselected(btnGeneral);
-        btnSelected(btnCancel);
-        btnSelected(btnCommittee);
-        btnUnselected(btnCommitteeAttendance);
+        ChangeButton.btnUnselected(btnAdd);
+        ChangeButton.btnUnselected(btnGeneral);
+        ChangeButton.btnSelected(btnCancel);
+        ChangeButton.btnSelected(btnCommittee);
+        ChangeButton.btnUnselected(btnCommitteeAttendance);
 
         clearFeilds();
     }
