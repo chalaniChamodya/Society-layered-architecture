@@ -2,6 +2,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.CommitteeMemberDao;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMemberDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.CommitteeMember;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
@@ -10,10 +11,10 @@ import java.util.ArrayList;
 
 public class CommitteeMemberDaoImpl implements CommitteeMemberDao {
     @Override
-    public CommitteeMemberDto getData(String id) throws SQLException, ClassNotFoundException {
+    public CommitteeMember getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM committee_member WHERE committee_mem_id = ?", id);
 
-        CommitteeMemberDto dto = new CommitteeMemberDto();
+        CommitteeMember dto = new CommitteeMember();
 
         if(resultSet.next()){
             dto.setCom_mem_id(resultSet.getString(1));
@@ -24,12 +25,12 @@ public class CommitteeMemberDaoImpl implements CommitteeMemberDao {
     }
 
     @Override
-    public ArrayList<CommitteeMemberDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<CommitteeMember> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(CommitteeMemberDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(CommitteeMember dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO committee_member VALUES(?, ?, ?, ?, ?)",
                 dto.getCom_mem_id(),
                 dto.getMember_id(),
@@ -40,7 +41,7 @@ public class CommitteeMemberDaoImpl implements CommitteeMemberDao {
     }
 
     @Override
-    public boolean update(CommitteeMemberDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(CommitteeMember dto) throws SQLException, ClassNotFoundException {
        return SQLUtill.execute("UPDATE committee_member SET " +
                "member_id =?, " +
                "name = ?, " +

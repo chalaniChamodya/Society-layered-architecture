@@ -2,6 +2,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FamilyMemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FamilyMemberDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.FamilyMember;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
@@ -11,10 +12,10 @@ import java.util.ArrayList;
 public class FamilyMemberDaoImpl implements FamilyMemberDAO {
 
     @Override
-    public FamilyMemberDto getData(String id) throws SQLException, ClassNotFoundException {
+    public FamilyMember getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM member_family WHERE family_mem_id = ?", id);
 
-        FamilyMemberDto dto = new FamilyMemberDto();
+        FamilyMember dto = new FamilyMember();
 
         if(resultSet.next()){
             dto.setMember_id(resultSet.getString("member_id"));
@@ -26,12 +27,12 @@ public class FamilyMemberDaoImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public ArrayList<FamilyMemberDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<FamilyMember> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(FamilyMemberDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(FamilyMember dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO member_family VALUES(?, ?, ?, ?, ?, ?, ?)",
                 dto.getFamily_mem_id(),
                 dto.getMember_id(),
@@ -44,7 +45,7 @@ public class FamilyMemberDaoImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public boolean update(FamilyMemberDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(FamilyMember dto) throws SQLException, ClassNotFoundException {
        return SQLUtill.execute("UPDATE member_family SET " +
                "member_id =?, " +
                "name = ?, " +
@@ -119,10 +120,10 @@ public class FamilyMemberDaoImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public FamilyMemberDto getAllData(String id) throws SQLException, ClassNotFoundException {
+    public FamilyMember getAllData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM member_family WHERE family_mem_id = ?");
 
-        FamilyMemberDto memberDto = new FamilyMemberDto();
+        FamilyMember memberDto = new FamilyMember();
         if(resultSet.next()){
             memberDto.setFamily_mem_id(id);
             memberDto.setMember_id(resultSet.getString(2));

@@ -2,6 +2,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.ScholarshipDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.ScholarshipDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Scholarship;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
@@ -10,10 +11,10 @@ import java.util.ArrayList;
 
 public class ScholarshipDaoImpl implements ScholarshipDAO {
     @Override
-    public ScholarshipDto getData(String id) throws SQLException, ClassNotFoundException {
+    public Scholarship getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM scholarship WHERE scholarship_id = ?",id);
 
-        ScholarshipDto donationTm = new ScholarshipDto();
+        Scholarship donationTm = new Scholarship();
 
         if(resultSet.next()){
             donationTm.setDonation_id(resultSet.getString(1));
@@ -24,12 +25,12 @@ public class ScholarshipDaoImpl implements ScholarshipDAO {
     }
 
     @Override
-    public ArrayList<ScholarshipDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<Scholarship> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(ScholarshipDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Scholarship dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO scholarship VALUES(?, ?, ?, ?)",
                 dto.getDonation_id(),
                 dto.getDate(),
@@ -39,7 +40,7 @@ public class ScholarshipDaoImpl implements ScholarshipDAO {
     }
 
     @Override
-    public boolean update(ScholarshipDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Scholarship dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("UPDATE scholarship SET " +
                 "date = ?, " +
                 "amount = ?, " +

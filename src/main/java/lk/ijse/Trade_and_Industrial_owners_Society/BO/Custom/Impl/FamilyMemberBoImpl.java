@@ -4,6 +4,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FamilyMemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FamilyMemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FamilyMemberDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FamilyMemberDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.FamilyMember;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,23 +14,23 @@ public class FamilyMemberBoImpl implements FamilyMemberBO {
 
 
     @Override
-    public FamilyMemberDto getData(String id) throws SQLException, ClassNotFoundException {
+    public FamilyMember getData(String id) throws SQLException, ClassNotFoundException {
         return familyMemberDAO.getData(id);
     }
 
     @Override
-    public ArrayList<FamilyMemberDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<FamilyMember> getAllDetail() throws SQLException, ClassNotFoundException {
         return familyMemberDAO.getAllDetail();
     }
 
     @Override
     public boolean saveFamilyMember(FamilyMemberDto dto) throws SQLException, ClassNotFoundException {
-        return familyMemberDAO.save(dto);
+        return familyMemberDAO.save(new FamilyMember(dto.getFamily_mem_id(), dto.getMember_id(), dto.getName(),dto.getRelationship(), dto.getOccupation(),dto.getDate_of_birth(), dto.getIsAlive()));
     }
 
     @Override
     public boolean updateFamilyMember(FamilyMemberDto dto) throws SQLException, ClassNotFoundException {
-        return familyMemberDAO.update(dto);
+        return familyMemberDAO.update(new FamilyMember(dto.getFamily_mem_id(), dto.getMember_id(), dto.getName(),dto.getRelationship(), dto.getOccupation(),dto.getDate_of_birth(), dto.getIsAlive()));
     }
 
     @Override
@@ -53,7 +54,7 @@ public class FamilyMemberBoImpl implements FamilyMemberBO {
     }
 
     @Override
-    public FamilyMemberDto getAllFamilyMemberData(String id) throws SQLException, ClassNotFoundException {
+    public FamilyMember getAllFamilyMemberData(String id) throws SQLException, ClassNotFoundException {
         return familyMemberDAO.getAllData(id);
     }
 

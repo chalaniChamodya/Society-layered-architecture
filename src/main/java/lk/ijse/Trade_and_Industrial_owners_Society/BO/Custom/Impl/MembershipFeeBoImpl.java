@@ -4,6 +4,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MembershipFeeBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.MembershipFeeDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MembershipFeeDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MembershipFeeDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.MembershipFee;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,18 +13,18 @@ public class MembershipFeeBoImpl implements MembershipFeeBO {
     MembershipFeeDAO membershipFeeDAO = new MembershipFeeDaoImpl();
 
     @Override
-    public MembershipFeeDto getData(String id) throws SQLException, ClassNotFoundException {
+    public MembershipFee getData(String id) throws SQLException, ClassNotFoundException {
         return membershipFeeDAO.getData(id);
     }
 
     @Override
     public boolean saveMemFee(MembershipFeeDto dto) throws SQLException, ClassNotFoundException {
-        return membershipFeeDAO.save(dto);
+        return membershipFeeDAO.save(new MembershipFee(dto.getMember_fee_id(), dto.getMember_id(), dto.getMember_name(), dto.getDate(), dto.getAmount()));
     }
 
     @Override
     public boolean updateMemFee(MembershipFeeDto dto) throws SQLException, ClassNotFoundException {
-        return membershipFeeDAO.update(dto);
+        return membershipFeeDAO.update(new MembershipFee(dto.getMember_fee_id(), dto.getMember_id(), dto.getMember_name(), dto.getDate(), dto.getAmount()));
     }
 
     @Override

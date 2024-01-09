@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SubscriptionFeeDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DbConnection.DBConnection;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SubscriptionFeeDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.SubscriptionFee;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.Connection;
@@ -15,10 +16,10 @@ import java.util.ArrayList;
 
 public class SubscriptionFeeDaoImpl implements SubscriptionFeeDAO {
     @Override
-    public SubscriptionFeeDto getData(String id) throws SQLException, ClassNotFoundException {
+    public SubscriptionFee getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM subscription_fee WHERE subscription_fee_id = ?",id);
 
-        SubscriptionFeeDto dto = new SubscriptionFeeDto();
+        SubscriptionFee dto = new SubscriptionFee();
 
         if (resultSet.next()) {
             dto.setSubscription_fee_id(resultSet.getString(1));
@@ -29,12 +30,12 @@ public class SubscriptionFeeDaoImpl implements SubscriptionFeeDAO {
     }
 
     @Override
-    public ArrayList<SubscriptionFeeDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<SubscriptionFee> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(SubscriptionFeeDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(SubscriptionFee dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO subscription_fee VALUES (?,?,?,?,?)",
                 dto.getSubscription_fee_id(),
                 dto.getMember_id(),
@@ -45,7 +46,7 @@ public class SubscriptionFeeDaoImpl implements SubscriptionFeeDAO {
     }
 
     @Override
-    public boolean update(SubscriptionFeeDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(SubscriptionFee dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("UPDATE subscription_fee SET " +
                 "member_id = ?, " +
                 "member_name = ?, " +

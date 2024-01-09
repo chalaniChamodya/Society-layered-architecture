@@ -2,6 +2,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FundingProgramDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FundingProgramDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.FundingProgram;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
@@ -10,10 +11,10 @@ import java.util.ArrayList;
 
 public class FundingProgramDaoImpl implements FundingProgramDAO {
     @Override
-    public FundingProgramDto getData(String id) throws SQLException, ClassNotFoundException {
+    public FundingProgram getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM funding_program WHERE program_id = ?", id);
 
-        FundingProgramDto programTm = new FundingProgramDto();
+        FundingProgram programTm = new FundingProgram();
 
         if(resultSet.next()){
             programTm.setProgram_id(resultSet.getString(1));
@@ -24,12 +25,12 @@ public class FundingProgramDaoImpl implements FundingProgramDAO {
     }
 
     @Override
-    public ArrayList<FundingProgramDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<FundingProgram> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(FundingProgramDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(FundingProgram dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO funding_program VALUES(?, ?, ?, ?, ?, ?, ?)",
                 dto.getProgram_id(),
                 dto.getProgram_name(),
@@ -42,7 +43,7 @@ public class FundingProgramDaoImpl implements FundingProgramDAO {
     }
 
     @Override
-    public boolean update(FundingProgramDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(FundingProgram dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("UPDATE funding_program SET " +
                 "name =?, " +
                 "description = ?, " +

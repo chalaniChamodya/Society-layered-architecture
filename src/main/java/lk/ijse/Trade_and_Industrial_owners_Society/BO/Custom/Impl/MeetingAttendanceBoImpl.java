@@ -4,6 +4,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MeetingAttendanceBO
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.MeetingAttendanceDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MeetingAttendanceDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MeetingAttendanceDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.MeetingAttendance;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,13 +15,13 @@ public class MeetingAttendanceBoImpl implements MeetingAttendanceBO {
     MeetingAttendanceDAO meetingAttendanceDAO = new MeetingAttendanceDaoImpl();
 
     @Override
-    public MeetingAttendanceDto getData(String id) throws SQLException, ClassNotFoundException {
+    public MeetingAttendance getData(String id) throws SQLException, ClassNotFoundException {
         return meetingAttendanceDAO.getData(id);
     }
 
     @Override
     public boolean save(MeetingAttendanceDto dto) throws SQLException, ClassNotFoundException {
-        return meetingAttendanceDAO.save(dto);
+        return meetingAttendanceDAO.save(new MeetingAttendance(dto.getMeeting_id(), dto.getMember_id(), dto.getMember_name(), dto.getDate(), dto.getTime()));
     }
 
     @Override

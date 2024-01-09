@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.UserDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DbConnection.DBConnection;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.UserDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.User;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.Connection;
@@ -13,17 +14,17 @@ import java.util.ArrayList;
 public class UserDaoImpl implements UserDAO {
 
     @Override
-    public UserDto getData(String id) throws SQLException, ClassNotFoundException {
+    public User getData(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public ArrayList<UserDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<User> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(UserDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(User dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO user VALUES (?, ?, ?, ?, ?)",
                 dto.getUser_id(),
                 dto.getCom_mem_id(),
@@ -34,7 +35,7 @@ public class UserDaoImpl implements UserDAO {
     }
 
     @Override
-    public boolean update(UserDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(User dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 

@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SpecialScholarshipDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SpecialScholDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.SpecialSchol;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
@@ -14,10 +15,10 @@ import java.util.Map;
 
 public class SpecialScholarshipDaoImpl implements SpecialScholarshipDAO {
     @Override
-    public SpecialScholDto getData(String id) throws SQLException, ClassNotFoundException {
+    public SpecialSchol getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM special_schol WHERE schol_id = ?", id);
 
-        SpecialScholDto donationTm = new SpecialScholDto();
+        SpecialSchol donationTm = new SpecialSchol();
 
         if(resultSet.next()){
             donationTm.setSchol_id(resultSet.getString("schol_id"));
@@ -28,12 +29,12 @@ public class SpecialScholarshipDaoImpl implements SpecialScholarshipDAO {
     }
 
     @Override
-    public ArrayList<SpecialScholDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<SpecialSchol> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(SpecialScholDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(SpecialSchol dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO special_schol VALUES(?, ?, ?, ?, ?)",
                 dto.getSchol_id(),
                 dto.getMember_id(),
@@ -44,7 +45,7 @@ public class SpecialScholarshipDaoImpl implements SpecialScholarshipDAO {
     }
 
     @Override
-    public boolean update(SpecialScholDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(SpecialSchol dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 
@@ -97,46 +98,7 @@ public class SpecialScholarshipDaoImpl implements SpecialScholarshipDAO {
     }
 
     @Override
-    public Map<String, LocalDate> calculateMemberDuration() throws SQLException, ClassNotFoundException {
-        Map<String, LocalDate> memberJoinDates = new HashMap<>();
-
-        ResultSet resultSet = SQLUtill.execute("SELECT member_id, joined_date FROM member");
-
-        if (resultSet.next()){
-            String MemberId = resultSet.getString("member_id");
-            LocalDate joinedDate = resultSet.getDate("joined_date").toLocalDate();
-            memberJoinDates.put(MemberId, joinedDate);
-        }
-        return memberJoinDates;
-    }
-
-    @Override
     public ResultSet getAttendance() throws SQLException, ClassNotFoundException {
        return SQLUtill.execute("SELECT member_id, COUNT(*) AS total_meetings FROM general_attendance GROUP BY member_id");
-    }
-
-    @Override
-    public Map<String, Double> calculateMeetingAttendance() throws SQLException, ClassNotFoundException {
-        Map<String, Double> meetingAttendance = new HashMap<>();
-
-        ResultSet totalMeetingResultSet = SQLUtill.execute("SELECT COUNT(*) AS total_meetings FROM general_meeting");
-            int totalMeeting = 0;
-            if(totalMeetingResultSet.next()){
-                totalMeeting = totalMeetingResultSet.getInt("total_meetings");
-                System.out.println("Total meetings " + totalMeeting);
-            }
-
-            ResultSet attendanceResultSet = getAttendance();
-            if (attendanceResultSet.next()){
-                String member_id = attendanceResultSet.getString("member_id");
-                int member_meetings = attendanceResultSet.getInt("total_meetings");
-                System.out.println(member_id + "  " + member_meetings);
-
-                double attendancePercentage = (double) member_meetings/totalMeeting * 100;
-                System.out.println(attendancePercentage);
-                meetingAttendance.put(member_id, attendancePercentage);
-            }
-       
-        return meetingAttendance;
     }
 }

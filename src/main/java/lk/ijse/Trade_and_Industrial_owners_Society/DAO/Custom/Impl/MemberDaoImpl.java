@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DbConnection.DBConnection;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Member;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.*;
@@ -15,10 +16,10 @@ import java.util.Map;
 
 public class MemberDaoImpl implements MemberDAO {
     @Override
-    public MemberDto getData(String id) throws SQLException, ClassNotFoundException {
+    public Member getData(String id) throws SQLException, ClassNotFoundException {
        ResultSet resultSet = SQLUtill.execute("SELECT * FROM member WHERE member_id = ?", id);
 
-        MemberDto memberDTO = new MemberDto();
+        Member memberDTO = new Member();
 
         if(resultSet.next()){
             memberDTO.setMember_id(resultSet.getString(1));
@@ -31,12 +32,12 @@ public class MemberDaoImpl implements MemberDAO {
     }
 
     @Override
-    public ArrayList<MemberDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<Member> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(MemberDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Member dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO member VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 dto.getMember_id(),
                 dto.getName_with_initials(),
@@ -55,7 +56,7 @@ public class MemberDaoImpl implements MemberDAO {
     }
 
     @Override
-    public boolean update(MemberDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Member dto) throws SQLException, ClassNotFoundException {
        return SQLUtill.execute("UPDATE member SET name_with_initials =?, " +
                "full_name = ?, " +
                "business_address = ?, " +

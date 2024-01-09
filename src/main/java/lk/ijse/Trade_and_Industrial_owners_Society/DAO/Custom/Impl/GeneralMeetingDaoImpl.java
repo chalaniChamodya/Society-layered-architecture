@@ -1,12 +1,9 @@
 package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.GeneralMeetingDAO;
-import lk.ijse.Trade_and_Industrial_owners_Society.DbConnection.DBConnection;
-import lk.ijse.Trade_and_Industrial_owners_Society.Dto.GeneralMeetingDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.GeneralMeeting;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -14,10 +11,10 @@ import java.util.ArrayList;
 
 public class GeneralMeetingDaoImpl implements GeneralMeetingDAO {
     @Override
-    public GeneralMeetingDto getData(String id) throws SQLException, ClassNotFoundException {
+    public GeneralMeeting getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM general_meeting WHERE gen_meeting_id = ?", id);
 
-        GeneralMeetingDto dto = new GeneralMeetingDto();
+        GeneralMeeting dto = new GeneralMeeting();
 
         if(resultSet.next()){
             dto.setGeneral_meeting_id(resultSet.getString(1));
@@ -29,12 +26,12 @@ public class GeneralMeetingDaoImpl implements GeneralMeetingDAO {
     }
 
     @Override
-    public ArrayList<GeneralMeetingDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<GeneralMeeting> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(GeneralMeetingDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(GeneralMeeting dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO general_meeting VALUES (?, ?, ?, ?, ?)",
                 dto.getGeneral_meeting_id(),
                 dto.getDate(),
@@ -45,7 +42,7 @@ public class GeneralMeetingDaoImpl implements GeneralMeetingDAO {
     }
 
     @Override
-    public boolean update(GeneralMeetingDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(GeneralMeeting dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("UPDATE general_meeting SET date = ?, time = ?, description = ?, location = ? WHERE gen_meeting_id = ?",
                 dto.getDate(),
                 dto.getTime(),

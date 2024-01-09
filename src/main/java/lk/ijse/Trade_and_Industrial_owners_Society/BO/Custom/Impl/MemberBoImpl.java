@@ -4,6 +4,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Member;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -15,18 +16,18 @@ public class MemberBoImpl implements MemberBO {
 
 
     @Override
-    public MemberDto getData(String id) throws SQLException, ClassNotFoundException {
+    public Member getData(String id) throws SQLException, ClassNotFoundException {
         return memberDAO.getData(id);
     }
 
     @Override
     public boolean saveMember(MemberDto dto) throws SQLException, ClassNotFoundException {
-        return memberDAO.save(dto);
+        return memberDAO.save(new Member(dto.getMember_id(), dto.getName_with_initials(), dto.getFull_name(), dto.getBusiness_address(), dto.getPersonal_address(), dto.getBusiness_type(), dto.getNic(), dto.getEmail(), dto.getDate_of_birth(), dto.getPersonal_contact_num(), dto.getBusiness_contact_num(), dto.getAdmission_fee(), dto.getJoined_date()));
     }
 
     @Override
     public boolean updateMember(MemberDto dto) throws SQLException, ClassNotFoundException {
-        return memberDAO.update(dto);
+        return memberDAO.update(new Member(dto.getMember_id(), dto.getName_with_initials(), dto.getFull_name(), dto.getBusiness_address(), dto.getPersonal_address(), dto.getBusiness_type(), dto.getNic(), dto.getEmail(), dto.getDate_of_birth(), dto.getPersonal_contact_num(), dto.getBusiness_contact_num(), dto.getAdmission_fee(), dto.getJoined_date()));
     }
 
     @Override

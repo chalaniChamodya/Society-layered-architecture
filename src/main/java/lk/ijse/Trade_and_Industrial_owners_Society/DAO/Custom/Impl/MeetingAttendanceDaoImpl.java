@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MeetingAttendanceDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DbConnection.DBConnection;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MeetingAttendanceDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.MeetingAttendance;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.*;
@@ -15,10 +16,10 @@ import java.util.Map;
 public class MeetingAttendanceDaoImpl implements MeetingAttendanceDAO {
 
     @Override
-    public MeetingAttendanceDto getData(String id) throws SQLException, ClassNotFoundException {
+    public MeetingAttendance getData(String id) throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtill.execute("SELECT * FROM general_attendance WHERE gen_meeting_id = ?", id);
 
-        MeetingAttendanceDto attendanceTm = new MeetingAttendanceDto();
+        MeetingAttendance attendanceTm = new MeetingAttendance();
 
         if(resultSet.next()){
             attendanceTm.setMeeting_id(resultSet.getString(1));
@@ -29,12 +30,12 @@ public class MeetingAttendanceDaoImpl implements MeetingAttendanceDAO {
     }
 
     @Override
-    public ArrayList<MeetingAttendanceDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<MeetingAttendance> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(MeetingAttendanceDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(MeetingAttendance dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO general_attendance VALUES(?, ?, ?, ?, ?)",
                 dto.getMeeting_id(),
                 dto.getMember_id(),
@@ -45,7 +46,7 @@ public class MeetingAttendanceDaoImpl implements MeetingAttendanceDAO {
     }
 
     @Override
-    public boolean update(MeetingAttendanceDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(MeetingAttendance dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 

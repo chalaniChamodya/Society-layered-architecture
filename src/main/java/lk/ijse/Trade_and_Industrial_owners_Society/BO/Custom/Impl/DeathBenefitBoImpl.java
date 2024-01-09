@@ -6,6 +6,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FamilyMemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.DeathBenefitDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FamilyMemberDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.DonationDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Donation;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ public class DeathBenefitBoImpl implements DeathBenefitBO {
     DeathBenefitDAO deathBenefitDAO = new DeathBenefitDaoImpl();
 
     @Override
-    public DonationDto getData(String id) throws SQLException, ClassNotFoundException {
+    public Donation getData(String id) throws SQLException, ClassNotFoundException {
         return deathBenefitDAO.getData(id);
     }
 
@@ -49,12 +50,12 @@ public class DeathBenefitBoImpl implements DeathBenefitBO {
 
     @Override
     public boolean saveDonation(DonationDto donationDto) throws SQLException, ClassNotFoundException {
-        return deathBenefitDAO.save(donationDto);
+        return deathBenefitDAO.save(new Donation(donationDto.getDonation_id(), donationDto.getDate(), donationDto.getAmount(), donationDto.getFamily_member_id()));
     }
 
     @Override
     public boolean update(DonationDto dto) throws SQLException, ClassNotFoundException {
-        return deathBenefitDAO.update(dto);
+        return deathBenefitDAO.update(new Donation(dto.getDonation_id(), dto.getDate(), dto.getAmount(), dto.getFamily_member_id()));
     }
 
     @Override

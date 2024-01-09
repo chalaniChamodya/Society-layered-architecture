@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.DeathBenefitDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FamilyMemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.DonationDto;
+import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Donation;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.Connection;
@@ -12,10 +13,10 @@ import java.util.ArrayList;
 
 public class DeathBenefitDaoImpl implements DeathBenefitDAO {
     @Override
-    public DonationDto getData(String id) throws SQLException, ClassNotFoundException {
+    public Donation getData(String id) throws SQLException, ClassNotFoundException {
        ResultSet resultSet = SQLUtill.execute("SELECT * FROM death_benefit WHERE death_benefit_id = ?",id);
 
-        DonationDto donationTm = new DonationDto();
+        Donation donationTm = new Donation();
 
         if(resultSet.next()){
             donationTm.setDonation_id(resultSet.getString(1));
@@ -26,12 +27,12 @@ public class DeathBenefitDaoImpl implements DeathBenefitDAO {
     }
 
     @Override
-    public ArrayList<DonationDto> getAllDetail() throws SQLException, ClassNotFoundException {
+    public ArrayList<Donation> getAllDetail() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(DonationDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Donation dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("INSERT INTO death_benefit VALUES(?, ?, ?, ?)",
                 dto.getDonation_id(),
                 dto.getDate(),
@@ -41,7 +42,7 @@ public class DeathBenefitDaoImpl implements DeathBenefitDAO {
     }
 
     @Override
-    public boolean update(DonationDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Donation dto) throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("UPDATE death_benefit SET " +
                 "date = ?, " +
                 "amount = ?, " +
