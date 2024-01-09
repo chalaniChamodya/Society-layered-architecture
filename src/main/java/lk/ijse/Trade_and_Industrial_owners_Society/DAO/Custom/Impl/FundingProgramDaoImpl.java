@@ -68,34 +68,9 @@ public class FundingProgramDaoImpl implements FundingProgramDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT program_id FROM funding_program ORDER BY program_id DESC LIMIT 1");
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT program_id FROM funding_program ORDER BY program_id DESC LIMIT 1");
 
-        String currentFundingProgramId = null;
-
-        if(resultSet.next()){
-            currentFundingProgramId = resultSet.getString(1);
-            return splitFundingProgramId(currentFundingProgramId);
-        }
-        return splitFundingProgramId(null);
-    }
-
-    private String splitFundingProgramId(String currentFundingProgramId) {
-        if(currentFundingProgramId != null){
-            String[] split = currentFundingProgramId.split("FP");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "FP00" + id;
-            }else if(id < 100){
-                id++;
-                return "FP0" + id;
-            }else{
-                id++;
-                return "FP"+id;
-            }
-        }
-        return "FP001";
     }
 
     @Override

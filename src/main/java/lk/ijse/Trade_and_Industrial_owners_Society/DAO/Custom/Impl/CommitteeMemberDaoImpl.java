@@ -62,35 +62,10 @@ public class CommitteeMemberDaoImpl implements CommitteeMemberDao {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT committee_mem_id FROM committee_member ORDER BY committee_mem_id DESC LIMIT 1");
-
-        String currentCommitteeMemberId = null;
-
-        if(resultSet.next()){
-            currentCommitteeMemberId = resultSet.getString(1);
-            return splitCommitteeMemberId(currentCommitteeMemberId);
-        }
-        return splitCommitteeMemberId(null);
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT committee_mem_id FROM committee_member ORDER BY committee_mem_id DESC LIMIT 1");
     }
 
-    private String splitCommitteeMemberId(String currentCommitteeMemberId) {
-        if(currentCommitteeMemberId != null){
-            String[] split = currentCommitteeMemberId.split("C");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "C00" + id;
-            }else if(id < 100){
-                id++;
-                return "C0" + id;
-            }else{
-                id++;
-                return "C"+id;
-            }
-        }
-        return "C001";
-    }
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {

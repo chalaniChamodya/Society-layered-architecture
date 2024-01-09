@@ -70,35 +70,11 @@ public class FamilyMemberDaoImpl implements FamilyMemberDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT family_mem_id FROM member_family ORDER BY family_mem_id DESC LIMIT 1");
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT family_mem_id FROM member_family ORDER BY family_mem_id DESC LIMIT 1");
 
-        String currentFamilyMemberId = null;
-
-        if(resultSet.next()){
-            currentFamilyMemberId = resultSet.getString(1);
-            return splitFamilyMemberId(currentFamilyMemberId);
-        }
-        return splitFamilyMemberId(null);
     }
 
-    private String splitFamilyMemberId(String currentFamilyMemberId) {
-        if(currentFamilyMemberId != null){
-            String[] split = currentFamilyMemberId.split("FM");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "FM00" + id;
-            }else if(id < 100){
-                id++;
-                return "FM0" + id;
-            }else{
-                id++;
-                return "FM"+id;
-            }
-        }
-        return "FM001";
-    }
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {

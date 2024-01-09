@@ -65,36 +65,11 @@ public class SponsorDaoImpl implements SponsorDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT sponsor_id FROM sponsor ORDER BY sponsor_id DESC LIMIT 1");
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT sponsor_id FROM sponsor ORDER BY sponsor_id DESC LIMIT 1");
 
-        String currentSponsorId = null;
-
-        if(resultSet.next()){
-            currentSponsorId = resultSet.getString(1);
-            return splitSponsorId(currentSponsorId);
-        }
-        return splitSponsorId(null);
     }
 
-    private String splitSponsorId(String currentSponsorId) {
-        if(currentSponsorId != null){
-            String[] split = currentSponsorId.split("S");
-            int id = Integer.parseInt(split[1]);
-
-            if(id < 10){
-                id++;
-                return "S00" + id;
-            }else if(id < 100){
-                id++;
-                return "S0" + id;
-            }else{
-                id++;
-                return "S" + id;
-            }
-        }
-        return "S001";
-    }
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {

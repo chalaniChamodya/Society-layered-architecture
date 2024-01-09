@@ -2,15 +2,19 @@ package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.SubscriptionFeeBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.SubscriptionFeeDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.QueryDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SubscriptionFeeDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SubscriptionFeeDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.SubscriptionFee;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SubscriptionFeeBoImpl implements SubscriptionFeeBO {
-    SubscriptionFeeDAO subscriptionFeeDAO = new SubscriptionFeeDaoImpl();
+    SubscriptionFeeDAO subscriptionFeeDAO = (SubscriptionFeeDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SUBSCRIPTION_FEE);
+    QueryDAO queryDAO = (QueryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.QUERY);
 
     @Override
     public SubscriptionFeeDto getData(String id) throws SQLException, ClassNotFoundException {
@@ -43,7 +47,33 @@ public class SubscriptionFeeBoImpl implements SubscriptionFeeBO {
 
     @Override
     public String generateNewSubFeeId() throws SQLException, ClassNotFoundException {
-        return subscriptionFeeDAO.generateNewId();
+        ResultSet resultSet = subscriptionFeeDAO.generateNewId();
+
+        String currentSubscriptionFeeId = null;
+
+        if(resultSet.next()){
+            currentSubscriptionFeeId = resultSet.getString(1);
+            return splitSubscriptionFeeId(currentSubscriptionFeeId);
+        }
+        return splitSubscriptionFeeId(null);
+    }
+
+    private static String splitSubscriptionFeeId(String currentSubscriptionFeeId) {
+        if(currentSubscriptionFeeId != null){
+            String[] split = currentSubscriptionFeeId.split("SF");
+            int id = Integer.parseInt(split[1]);
+            if(id < 10){
+                id++;
+                return "SF00" + id;
+            }else if(id < 100){
+                id++;
+                return "SF0" + id;
+            }else{
+                id++;
+                return "SF"+id;
+            }
+        }
+        return "SF001";
     }
 
     @Override
@@ -58,6 +88,6 @@ public class SubscriptionFeeBoImpl implements SubscriptionFeeBO {
 
     @Override
     public ArrayList<String> getAllUnpaidSubscriptionFeeId() throws SQLException, ClassNotFoundException {
-        return subscriptionFeeDAO.getAllUnpaidSubscriptionFeeId();
+        return queryDAO.getAllUnpaidSubscriptionFeeId();
     }
 }

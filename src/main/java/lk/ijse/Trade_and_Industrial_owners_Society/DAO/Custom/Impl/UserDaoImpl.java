@@ -45,39 +45,9 @@ public class UserDaoImpl implements UserDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getInstance().getConnection();
-
-        String sql = "SELECT user_id FROM user ORDER BY user_id DESC LIMIT 1";
-        ResultSet resultSet = connection.prepareStatement(sql).executeQuery();
-
-        String currentUserId = null;
-
-        if(resultSet.next()){
-            currentUserId = resultSet.getString(1);
-            return splitUserId(currentUserId);
-        }
-        return splitUserId(null);
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT user_id FROM user ORDER BY user_id DESC LIMIT 1");
     }
-
-    private static String splitUserId(String currentUserId) {
-        if(currentUserId != null){
-            String[] split = currentUserId.split("U");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "U00" + id;
-            }else if(id < 100){
-                id++;
-                return "U0" + id;
-            }else{
-                id++;
-                return "U"+id;
-            }
-        }
-        return "U001";
-    }
-
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {

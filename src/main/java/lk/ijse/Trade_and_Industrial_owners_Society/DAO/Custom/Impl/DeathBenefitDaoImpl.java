@@ -61,35 +61,11 @@ public class DeathBenefitDaoImpl implements DeathBenefitDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT death_benefit_id FROM death_benefit ORDER BY death_benefit_id DESC LIMIT 1");
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT death_benefit_id FROM death_benefit ORDER BY death_benefit_id DESC LIMIT 1");
 
-        String currentDonationId = null;
-
-        if(resultSet.next()){
-            currentDonationId = resultSet.getString(1);
-            return splitDeathBenefitId(currentDonationId);
-        }
-        return splitDeathBenefitId(null);
     }
 
-    private String splitDeathBenefitId(String currentDonationId) {
-        if(currentDonationId != null){
-            String[] split = currentDonationId.split("DB");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "DB00" + id;
-            }else if(id < 100){
-                id++;
-                return "DB0" + id;
-            }else{
-                id++;
-                return "DB"+id;
-            }
-        }
-        return "DB001";
-    }
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {

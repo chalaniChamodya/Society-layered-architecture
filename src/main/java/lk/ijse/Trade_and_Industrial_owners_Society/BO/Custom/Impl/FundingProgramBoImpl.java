@@ -6,6 +6,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FundingProgra
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FundingProgramDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.FundingProgram;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -45,8 +46,35 @@ public class FundingProgramBoImpl implements FundingProgramBO {
 
     @Override
     public String generateNewFundingProgramId() throws SQLException, ClassNotFoundException {
-        return fundingProgramDAO.generateNewId();
+        ResultSet resultSet = fundingProgramDAO.generateNewId();
+
+        String currentFundingProgramId = null;
+
+        if(resultSet.next()){
+            currentFundingProgramId = resultSet.getString(1);
+            return splitFundingProgramId(currentFundingProgramId);
+        }
+        return splitFundingProgramId(null);
     }
+
+    private String splitFundingProgramId(String currentFundingProgramId) {
+        if(currentFundingProgramId != null){
+            String[] split = currentFundingProgramId.split("FP");
+            int id = Integer.parseInt(split[1]);
+            if(id < 10){
+                id++;
+                return "FP00" + id;
+            }else if(id < 100){
+                id++;
+                return "FP0" + id;
+            }else{
+                id++;
+                return "FP"+id;
+            }
+        }
+        return "FP001";
+    }
+
 
     @Override
     public ArrayList<String> getAllFundingProgramId() throws SQLException, ClassNotFoundException {

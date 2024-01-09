@@ -63,36 +63,11 @@ public class CommitteeMeetingDaoImpl implements CommitteeMeetingDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT com_meeting_id FROM committee_meeting ORDER BY com_meeting_id DESC LIMIT 1");
-       
-        String currentCommitteeMeetingId = null;
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT com_meeting_id FROM committee_meeting ORDER BY com_meeting_id DESC LIMIT 1");
 
-        if(resultSet.next()){
-            currentCommitteeMeetingId = resultSet.getString(1);
-            return splitCommitteeMeetingId(currentCommitteeMeetingId);
-        }
-        return splitCommitteeMeetingId(null);
     }
 
-    private static String splitCommitteeMeetingId(String currentCommitteeMeetingId) {
-        if(currentCommitteeMeetingId != null){
-            String[] split = currentCommitteeMeetingId.split("C");
-            int id = Integer.parseInt(split[1]);
-
-            if(id<10){
-                id++;
-                return "C00" + id;
-            }else if(id<100){
-                id++;
-                return "C0" + id;
-            }else{
-                id++;
-                return "C" + id;
-            }
-        }
-        return "C001";
-    }
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {

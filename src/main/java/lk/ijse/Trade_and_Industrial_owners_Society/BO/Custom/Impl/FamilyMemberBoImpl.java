@@ -6,6 +6,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FamilyMemberD
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FamilyMemberDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.FamilyMember;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -51,7 +52,33 @@ public class FamilyMemberBoImpl implements FamilyMemberBO {
 
     @Override
     public String generateNewFamilyMemberId() throws SQLException, ClassNotFoundException {
-        return familyMemberDAO.generateNewId();
+        ResultSet resultSet = familyMemberDAO.generateNewId();
+
+        String currentFamilyMemberId = null;
+
+        if(resultSet.next()){
+            currentFamilyMemberId = resultSet.getString(1);
+            return splitFamilyMemberId(currentFamilyMemberId);
+        }
+        return splitFamilyMemberId(null);
+    }
+
+    private String splitFamilyMemberId(String currentFamilyMemberId) {
+        if(currentFamilyMemberId != null){
+            String[] split = currentFamilyMemberId.split("FM");
+            int id = Integer.parseInt(split[1]);
+            if(id < 10){
+                id++;
+                return "FM00" + id;
+            }else if(id < 100){
+                id++;
+                return "FM0" + id;
+            }else{
+                id++;
+                return "FM"+id;
+            }
+        }
+        return "FM001";
     }
 
     @Override

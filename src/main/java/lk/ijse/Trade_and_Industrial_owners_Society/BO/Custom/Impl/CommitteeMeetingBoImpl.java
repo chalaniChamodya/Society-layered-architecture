@@ -6,6 +6,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.CommitteeMeet
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMeetingDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.CommitteeMeeting;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -42,7 +43,34 @@ public class CommitteeMeetingBoImpl implements CommitteeMeetingBO {
 
     @Override
     public String generateNewCommitteeMetingId() throws SQLException, ClassNotFoundException {
-        return committeeMeetingDAO.generateNewId();
+        ResultSet resultSet = committeeMeetingDAO.generateNewId();
+
+        String currentCommitteeMeetingId = null;
+
+        if(resultSet.next()){
+            currentCommitteeMeetingId = resultSet.getString(1);
+            return splitCommitteeMeetingId(currentCommitteeMeetingId);
+        }
+        return splitCommitteeMeetingId(null);
+    }
+
+    private static String splitCommitteeMeetingId(String currentCommitteeMeetingId) {
+        if(currentCommitteeMeetingId != null){
+            String[] split = currentCommitteeMeetingId.split("C");
+            int id = Integer.parseInt(split[1]);
+
+            if(id<10){
+                id++;
+                return "C00" + id;
+            }else if(id<100){
+                id++;
+                return "C0" + id;
+            }else{
+                id++;
+                return "C" + id;
+            }
+        }
+        return "C001";
     }
 
     @Override

@@ -56,7 +56,7 @@ public class MeetingAttendanceDaoImpl implements MeetingAttendanceDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
         return null;
     }
 

@@ -59,35 +59,11 @@ public class ScholarshipDaoImpl implements ScholarshipDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT scholarship_id FROM scholarship ORDER BY scholarship_id DESC LIMIT 1");
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT scholarship_id FROM scholarship ORDER BY scholarship_id DESC LIMIT 1");
 
-        String currentScholId = null;
-
-        if(resultSet.next()){
-            currentScholId = resultSet.getString(1);
-            return splitScholId(currentScholId);
-        }
-        return splitScholId(null);
     }
 
-    private String splitScholId(String currentScholId) {
-        if(currentScholId != null){
-            String[] split = currentScholId.split("S");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "S00" + id;
-            }else if(id < 100){
-                id++;
-                return "S0" + id;
-            }else{
-                id++;
-                return "S"+id;
-            }
-        }
-        return "S001";
-    }
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {

@@ -2,10 +2,12 @@ package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MemberDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.QueryDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MemberDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Member;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.Map;
 
 public class MemberBoImpl implements MemberBO {
     MemberDAO memberDAO = (MemberDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MEMBER);
+    QueryDAO queryDAO = (QueryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.QUERY);
 
 
     @Override
@@ -54,7 +57,33 @@ public class MemberBoImpl implements MemberBO {
 
     @Override
     public String generateNewMemberId() throws SQLException, ClassNotFoundException {
-        return memberDAO.generateNewId();
+        ResultSet resultSet = memberDAO.generateNewId();
+
+        String currentMemberId = null;
+
+        if(resultSet.next()){
+            currentMemberId = resultSet.getString(1);
+            return splitMemberId(currentMemberId);
+        }
+        return splitMemberId(null);
+    }
+
+    private String splitMemberId(String currentMemberId) {
+        if(currentMemberId != null){
+            String[] split = currentMemberId.split("M");
+            int id = Integer.parseInt(split[1]);
+            if(id < 10){
+                id++;
+                return "M00" + id;
+            }else if(id < 100){
+                id++;
+                return "M0" + id;
+            }else{
+                id++;
+                return "M"+id;
+            }
+        }
+        return "M001";
     }
 
     @Override
@@ -74,12 +103,12 @@ public class MemberBoImpl implements MemberBO {
 
     @Override
     public ArrayList<String> getAllEmailAddress_sub() throws SQLException, ClassNotFoundException {
-        return memberDAO.getAllEmailAddress();
+        return queryDAO.getAllEmailAddress();
     }
 
     @Override
     public ArrayList<String> getAllMemberEmailAddress_mem() throws SQLException, ClassNotFoundException {
-        return memberDAO.getAllMemberEmailAddress();
+        return queryDAO.getAllMemberEmailAddress();
     }
 
     @Override

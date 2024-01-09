@@ -6,6 +6,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.GeneralMeetin
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.GeneralMeetingDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.GeneralMeeting;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -43,8 +44,35 @@ public class GeneralMeetingBoImpl implements GeneralMeetingBO {
 
     @Override
     public String generateNewGeneralMeetingId() throws SQLException, ClassNotFoundException {
-        return generalMeetingDAO.generateNewId();
+        ResultSet resultSet = generalMeetingDAO.generateNewId();
+
+        String currentGeneralMeetingId = null;
+
+        if(resultSet.next()){
+            currentGeneralMeetingId = resultSet.getString(1);
+            return splitGeneralMeetingId(currentGeneralMeetingId);
+        }
+        return splitGeneralMeetingId(null);
     }
+
+    private static String splitGeneralMeetingId(String currentGeneralMeetingId) {
+        if(currentGeneralMeetingId != null){
+            String[] split = currentGeneralMeetingId.split("G");
+            int id = Integer.parseInt(split[1]);
+            if(id<10){
+                id++;
+                return "G00" + id;
+            }else if(id<100){
+                id++;
+                return "G0" + id;
+            }else{
+                id++;
+                return "G" + id;
+            }
+        }
+        return "G001";
+    }
+
 
     @Override
     public ArrayList<String> getAllGeneralMeetingId() throws SQLException, ClassNotFoundException {

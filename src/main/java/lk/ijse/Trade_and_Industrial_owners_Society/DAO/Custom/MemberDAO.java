@@ -12,8 +12,6 @@ import java.util.Map;
 public interface MemberDAO extends CrudDao<Member> {
     String getName(String id) throws SQLException, ClassNotFoundException;
     String getEmailAddress(String id) throws SQLException, ClassNotFoundException;
-    ArrayList<String> getAllEmailAddress() throws SQLException, ClassNotFoundException;
-    ArrayList<String> getAllMemberEmailAddress() throws SQLException, ClassNotFoundException;
     ArrayList<String> search(String searchTerm) throws SQLException, ClassNotFoundException;
     Map<String, LocalDate> calculateMemberDuration() throws SQLException, ClassNotFoundException;
 }

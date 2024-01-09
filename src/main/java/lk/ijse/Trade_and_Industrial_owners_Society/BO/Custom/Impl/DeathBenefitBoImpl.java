@@ -9,6 +9,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.Dto.DonationDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Donation;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -73,7 +74,33 @@ public class DeathBenefitBoImpl implements DeathBenefitBO {
 
     @Override
     public String generateNewId() throws SQLException, ClassNotFoundException {
-        return deathBenefitDAO.generateNewId();
+        ResultSet resultSet = deathBenefitDAO.generateNewId();
+
+        String currentDonationId = null;
+
+        if(resultSet.next()){
+            currentDonationId = resultSet.getString(1);
+            return splitDeathBenefitId(currentDonationId);
+        }
+        return splitDeathBenefitId(null);
+    }
+
+    private String splitDeathBenefitId(String currentDonationId) {
+        if(currentDonationId != null){
+            String[] split = currentDonationId.split("DB");
+            int id = Integer.parseInt(split[1]);
+            if(id < 10){
+                id++;
+                return "DB00" + id;
+            }else if(id < 100){
+                id++;
+                return "DB0" + id;
+            }else{
+                id++;
+                return "DB"+id;
+            }
+        }
+        return "DB001";
     }
 
     @Override

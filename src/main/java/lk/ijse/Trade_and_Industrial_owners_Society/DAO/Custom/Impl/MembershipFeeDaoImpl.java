@@ -69,35 +69,11 @@ public class MembershipFeeDaoImpl implements MembershipFeeDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT member_fee_id FROM member_fee ORDER BY member_fee_id DESC LIMIT 1");
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT member_fee_id FROM member_fee ORDER BY member_fee_id DESC LIMIT 1");
 
-        String currentMemberFeeId = null;
-
-        if(resultSet.next()){
-            currentMemberFeeId = resultSet.getString(1);
-            return splitMemberFeeId(currentMemberFeeId);
-        }
-        return splitMemberFeeId(null);
     }
 
-    private static String splitMemberFeeId(String currentMemberFeeId) {
-        if(currentMemberFeeId != null){
-            String[] split = currentMemberFeeId.split("MF");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "MF00" + id;
-            }else if(id < 100){
-                id++;
-                return "MF0" + id;
-            }else{
-                id++;
-                return "MF"+id;
-            }
-        }
-        return "MF001";
-    }
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {
@@ -125,19 +101,5 @@ public class MembershipFeeDaoImpl implements MembershipFeeDAO {
         return unpaidCount;
     }
 
-    @Override
-    public ArrayList<String> getAllUnpaidMembershipFeeId() throws SQLException, ClassNotFoundException {
-        YearMonth currentMonth = YearMonth.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
-        String date = currentMonth.format(formatter);
-
-        ResultSet resultSet = SQLUtill.execute("SELECT m.member_id FROM member m LEFT JOIN member_fee sf ON m.member_id = sf.member_id WHERE sf.date IS NULL OR DATE_FORMAT(sf.date,'%Y-%m') != ?", date);
-
-        ArrayList<String> list = new ArrayList<>();
-
-        while (resultSet.next()){
-            list.add(resultSet.getString(1));
-        }
-        return list;    }
 }

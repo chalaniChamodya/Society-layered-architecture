@@ -6,6 +6,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SpecialScholarship
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SpecialScholDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.SpecialSchol;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -43,7 +44,33 @@ public class SpecialScholarshipBoImpl implements SpecialScholarshipBO {
 
     @Override
     public String generateNewSpecialScholId() throws SQLException, ClassNotFoundException {
-        return specialScholarshipDAO.generateNewId();
+        ResultSet resultSet = specialScholarshipDAO.generateNewId();
+
+        String currentDonationId = null;
+
+        if(resultSet.next()){
+            currentDonationId = resultSet.getString(1);
+            return splitScholId(currentDonationId);
+        }
+        return splitScholId(null);
+    }
+
+    private String splitScholId(String currentSScholId) {
+        if(currentSScholId != null){
+            String[] split = currentSScholId.split("SS");
+            int id = Integer.parseInt(split[1]);
+            if(id < 10){
+                id++;
+                return "SS00" + id;
+            }else if(id < 100){
+                id++;
+                return "SS0" + id;
+            }else{
+                id++;
+                return "SS"+id;
+            }
+        }
+        return "SS001";
     }
 
     @Override

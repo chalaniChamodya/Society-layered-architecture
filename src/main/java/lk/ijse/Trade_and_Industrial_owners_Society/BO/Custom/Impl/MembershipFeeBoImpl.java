@@ -3,14 +3,18 @@ package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.MembershipFeeBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.MembershipFeeDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.MembershipFeeDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.QueryDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.MembershipFeeDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.MembershipFee;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MembershipFeeBoImpl implements MembershipFeeBO {
-    MembershipFeeDAO membershipFeeDAO = new MembershipFeeDaoImpl();
+    MembershipFeeDAO membershipFeeDAO = (MembershipFeeDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.MEMBERSHIP_FEE);
+    QueryDAO queryDAO = (QueryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.QUERY);
 
     @Override
     public MembershipFeeDto getData(String id) throws SQLException, ClassNotFoundException {
@@ -43,7 +47,33 @@ public class MembershipFeeBoImpl implements MembershipFeeBO {
 
     @Override
     public String generateNewMemFeeId() throws SQLException, ClassNotFoundException {
-        return membershipFeeDAO.generateNewId();
+        ResultSet resultSet = membershipFeeDAO.generateNewId();
+
+        String currentMemberFeeId = null;
+
+        if(resultSet.next()){
+            currentMemberFeeId = resultSet.getString(1);
+            return splitMemberFeeId(currentMemberFeeId);
+        }
+        return splitMemberFeeId(null);
+    }
+
+    private static String splitMemberFeeId(String currentMemberFeeId) {
+        if(currentMemberFeeId != null){
+            String[] split = currentMemberFeeId.split("MF");
+            int id = Integer.parseInt(split[1]);
+            if(id < 10){
+                id++;
+                return "MF00" + id;
+            }else if(id < 100){
+                id++;
+                return "MF0" + id;
+            }else{
+                id++;
+                return "MF"+id;
+            }
+        }
+        return "MF001";
     }
 
     @Override
@@ -58,6 +88,6 @@ public class MembershipFeeBoImpl implements MembershipFeeBO {
 
     @Override
     public ArrayList<String> getAllUnpaidMembershipFeeId() throws SQLException, ClassNotFoundException {
-        return membershipFeeDAO.getAllUnpaidMembershipFeeId();
+        return queryDAO.getAllUnpaidMembershipFeeId();
     }
 }

@@ -6,6 +6,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.SponsorDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.SponsorDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Sponsor;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -44,7 +45,34 @@ public class SponsorBoImpl implements SponsorBO {
 
     @Override
     public String generateNewSponsorId() throws SQLException, ClassNotFoundException {
-        return sponsorDAO.generateNewId();
+        ResultSet resultSet = sponsorDAO.generateNewId();
+
+        String currentSponsorId = null;
+
+        if(resultSet.next()){
+            currentSponsorId = resultSet.getString(1);
+            return splitSponsorId(currentSponsorId);
+        }
+        return splitSponsorId(null);
+    }
+
+    private String splitSponsorId(String currentSponsorId) {
+        if(currentSponsorId != null){
+            String[] split = currentSponsorId.split("S");
+            int id = Integer.parseInt(split[1]);
+
+            if(id < 10){
+                id++;
+                return "S00" + id;
+            }else if(id < 100){
+                id++;
+                return "S0" + id;
+            }else{
+                id++;
+                return "S" + id;
+            }
+        }
+        return "S001";
     }
 
     @Override

@@ -9,5 +9,5 @@ import java.util.ArrayList;
 
 public interface SubscriptionFeeDAO extends CrudDao<SubscriptionFee> {
     int unPaidSubscriptionFeeCount() throws SQLException, ClassNotFoundException;
-    ArrayList<String> getAllUnpaidSubscriptionFeeId() throws SQLException, ClassNotFoundException;
+
 }

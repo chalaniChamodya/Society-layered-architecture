@@ -58,34 +58,8 @@ public class GeneralMeetingDaoImpl implements GeneralMeetingDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT gen_meeting_id FROM general_meeting ORDER BY gen_meeting_id DESC LIMIT 1");
-
-        String currentGeneralMeetingId = null;
-
-        if(resultSet.next()){
-            currentGeneralMeetingId = resultSet.getString(1);
-            return splitGeneralMeetingId(currentGeneralMeetingId);
-        }
-        return splitGeneralMeetingId(null);
-    }
-
-    private static String splitGeneralMeetingId(String currentGeneralMeetingId) {
-        if(currentGeneralMeetingId != null){
-            String[] split = currentGeneralMeetingId.split("G");
-            int id = Integer.parseInt(split[1]);
-            if(id<10){
-                id++;
-                return "G00" + id;
-            }else if(id<100){
-                id++;
-                return "G0" + id;
-            }else{
-                id++;
-                return "G" + id;
-            }
-        }
-        return "G001";
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+       return SQLUtill.execute("SELECT gen_meeting_id FROM general_meeting ORDER BY gen_meeting_id DESC LIMIT 1");
     }
 
     @Override

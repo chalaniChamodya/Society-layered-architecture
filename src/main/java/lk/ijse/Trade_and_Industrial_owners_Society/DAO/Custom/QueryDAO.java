@@ -13,4 +13,8 @@ public interface QueryDAO extends SuperDAO {
     ObservableList<PieChart.Data> getFundDataForPieChart() throws SQLException;
     ObservableList<XYChart.Data<String, Number>> monthlyFund() throws SQLException;
     ObservableList<XYChart.Data<String, Number>> monthlyExpense() throws SQLException;
+    ArrayList<String> getAllEmailAddress() throws SQLException, ClassNotFoundException;
+    ArrayList<String> getAllMemberEmailAddress() throws SQLException, ClassNotFoundException;
+    ArrayList<String> getAllUnpaidMembershipFeeId() throws SQLException, ClassNotFoundException;
+    ArrayList<String> getAllUnpaidSubscriptionFeeId() throws SQLException, ClassNotFoundException;
 }

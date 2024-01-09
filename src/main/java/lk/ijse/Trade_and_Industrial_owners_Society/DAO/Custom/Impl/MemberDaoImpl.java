@@ -92,34 +92,9 @@ public class MemberDaoImpl implements MemberDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = SQLUtill.execute("SELECT member_id FROM member ORDER BY member_id DESC LIMIT 1");
+    public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT member_id FROM member ORDER BY member_id DESC LIMIT 1");
 
-        String currentMemberId = null;
-
-        if(resultSet.next()){
-            currentMemberId = resultSet.getString(1);
-            return splitMemberId(currentMemberId);
-        }
-        return splitMemberId(null);
-    }
-
-    private String splitMemberId(String currentMemberId) {
-        if(currentMemberId != null){
-            String[] split = currentMemberId.split("M");
-            int id = Integer.parseInt(split[1]);
-            if(id < 10){
-                id++;
-                return "M00" + id;
-            }else if(id < 100){
-                id++;
-                return "M0" + id;
-            }else{
-                id++;
-                return "M"+id;
-            }
-        }
-        return "M001";
     }
 
     @Override
@@ -146,37 +121,7 @@ public class MemberDaoImpl implements MemberDAO {
         return email;
     }
 
-    @Override
-    public ArrayList<String> getAllEmailAddress() throws SQLException, ClassNotFoundException {
-        YearMonth currentMonth = YearMonth.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
-        String date = currentMonth.format(formatter);
-        ResultSet resultSet = SQLUtill.execute("SELECT m.email FROM member m LEFT JOIN subscription_fee sf ON m.member_id = sf.member_id WHERE sf.date IS NULL OR DATE_FORMAT(sf.date,'%Y-%m') != ?", date);
-
-        ArrayList<String> list = new ArrayList<>();
-
-        while (resultSet.next()){
-            list.add(resultSet.getString(1));
-        }
-        return list;
-    }
-
-    @Override
-    public ArrayList<String> getAllMemberEmailAddress() throws SQLException, ClassNotFoundException {
-        YearMonth currentMonth = YearMonth.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-
-        String date = currentMonth.format(formatter);
-        ResultSet resultSet = SQLUtill.execute("SELECT m.email FROM member m LEFT JOIN member_fee mf ON m.member_id = mf.member_id WHERE mf.date IS NULL OR DATE_FORMAT(mf.date,'%Y-%m') != ?", date);
-
-        ArrayList<String> list = new ArrayList<>();
-
-        while (resultSet.next()){
-            list.add(resultSet.getString(1));
-        }
-        return list;
-    }
 
     @Override
     public ArrayList<String> search(String searchTerm) throws SQLException, ClassNotFoundException {
