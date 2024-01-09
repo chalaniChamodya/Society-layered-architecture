@@ -13,8 +13,19 @@ public class FundingProgramBoImpl implements FundingProgramBO {
     FundingProgramDAO fundingProgramDAO = new FundingProgramDaoImpl();
 
     @Override
-    public FundingProgram getData(String id) throws SQLException, ClassNotFoundException {
-        return fundingProgramDAO.getData(id);
+    public FundingProgramDto getData(String id) throws SQLException, ClassNotFoundException {
+        FundingProgram entity = fundingProgramDAO.getData(id);
+        FundingProgramDto dto = new FundingProgramDto();
+
+        dto.setProgram_id(entity.getProgram_id());
+        dto.setProgram_name(entity.getProgram_name());
+        dto.setDescription(entity.getDescription());
+        dto.setDate(entity.getDate());
+        dto.setLocation(entity.getLocation());
+        dto.setIncome(entity.getIncome());
+        dto.setExpenditure(entity.getExpenditure());
+
+        return dto;
     }
 
     @Override

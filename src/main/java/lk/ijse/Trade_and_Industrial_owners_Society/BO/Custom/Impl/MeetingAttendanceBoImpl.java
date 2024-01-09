@@ -15,8 +15,17 @@ public class MeetingAttendanceBoImpl implements MeetingAttendanceBO {
     MeetingAttendanceDAO meetingAttendanceDAO = new MeetingAttendanceDaoImpl();
 
     @Override
-    public MeetingAttendance getData(String id) throws SQLException, ClassNotFoundException {
-        return meetingAttendanceDAO.getData(id);
+    public MeetingAttendanceDto getData(String id) throws SQLException, ClassNotFoundException {
+        MeetingAttendance entity = meetingAttendanceDAO.getData(id);
+        MeetingAttendanceDto dto = new MeetingAttendanceDto();
+
+        dto.setMeeting_id(entity.getMeeting_id());
+        dto.setMember_id(entity.getMember_id());
+        dto.setMember_name(entity.getMember_name());
+        dto.setDate(entity.getDate());
+        dto.setTime(entity.getTime());
+
+        return dto;
     }
 
     @Override

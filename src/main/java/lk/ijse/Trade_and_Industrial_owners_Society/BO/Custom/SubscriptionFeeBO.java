@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface SubscriptionFeeBO extends SuperBO {
-    SubscriptionFee getData(String id) throws SQLException, ClassNotFoundException;
+    SubscriptionFeeDto getData(String id) throws SQLException, ClassNotFoundException;
     boolean saveSubFee(SubscriptionFeeDto dto) throws SQLException, ClassNotFoundException;
     boolean updateSubFee(SubscriptionFeeDto dto) throws SQLException, ClassNotFoundException;
     boolean deleteSubFee(String id) throws SQLException, ClassNotFoundException;

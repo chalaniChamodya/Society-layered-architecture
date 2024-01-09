@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface SponsorBO extends SuperBO {
-    Sponsor getData(String id) throws SQLException, ClassNotFoundException;
+    SponsorDto getData(String id) throws SQLException, ClassNotFoundException;
     boolean saveSponsor(SponsorDto dto) throws SQLException, ClassNotFoundException;
     boolean updateSponsor(SponsorDto dto) throws SQLException, ClassNotFoundException;
     boolean deleteSponsor(String id) throws SQLException, ClassNotFoundException;

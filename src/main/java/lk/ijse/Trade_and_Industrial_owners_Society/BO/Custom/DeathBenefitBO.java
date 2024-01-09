@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DeathBenefitBO extends SuperBO {
-    Donation getData(String id) throws SQLException, ClassNotFoundException;
+    DonationDto getData(String id) throws SQLException, ClassNotFoundException;
     boolean saveTransaction(DonationDto dto) throws SQLException, ClassNotFoundException;
     boolean saveDonation(DonationDto donationDto) throws SQLException, ClassNotFoundException;
     boolean update(DonationDto dto) throws SQLException, ClassNotFoundException;

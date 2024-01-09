@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface FundingProgramBO extends SuperBO {
-    FundingProgram getData(String id) throws SQLException, ClassNotFoundException;
+    FundingProgramDto getData(String id) throws SQLException, ClassNotFoundException;
     boolean saveFundingProgram(FundingProgramDto dto) throws SQLException, ClassNotFoundException;
     boolean updateFundingProgram(FundingProgramDto dto) throws SQLException, ClassNotFoundException;
     boolean deleteFundingProgram(String id) throws SQLException, ClassNotFoundException;

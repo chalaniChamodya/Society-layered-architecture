@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface FamilyMemberBO extends SuperBO {
-    FamilyMember getData(String id) throws SQLException, ClassNotFoundException;
+    FamilyMemberDto getData(String id) throws SQLException, ClassNotFoundException;
     ArrayList<FamilyMember> getAllDetail() throws SQLException, ClassNotFoundException;
     boolean saveFamilyMember(FamilyMemberDto dto) throws SQLException, ClassNotFoundException;
     boolean updateFamilyMember(FamilyMemberDto dto) throws SQLException, ClassNotFoundException;
@@ -16,6 +16,6 @@ public interface FamilyMemberBO extends SuperBO {
     String generateNewFamilyMemberId() throws SQLException, ClassNotFoundException;
     ArrayList<String> getAllFamilyMemberId() throws SQLException, ClassNotFoundException;
     boolean updateIsAlive(String id) throws SQLException, ClassNotFoundException;
-    FamilyMember getAllFamilyMemberData(String id) throws SQLException, ClassNotFoundException;
+    FamilyMemberDto getAllFamilyMemberData(String id) throws SQLException, ClassNotFoundException;
     ArrayList<String> getAllAliveFamMemberId() throws SQLException, ClassNotFoundException;
 }

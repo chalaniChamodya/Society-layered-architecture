@@ -14,8 +14,19 @@ public class FamilyMemberBoImpl implements FamilyMemberBO {
 
 
     @Override
-    public FamilyMember getData(String id) throws SQLException, ClassNotFoundException {
-        return familyMemberDAO.getData(id);
+    public FamilyMemberDto getData(String id) throws SQLException, ClassNotFoundException {
+        FamilyMember entity = familyMemberDAO.getData(id);
+        FamilyMemberDto dto = new FamilyMemberDto();
+
+        dto.setFamily_mem_id(entity.getFamily_mem_id());
+        dto.setMember_id(entity.getMember_id());
+        dto.setName(entity.getName());
+        dto.setRelationship(entity.getRelationship());
+        dto.setOccupation(entity.getOccupation());
+        dto.setDate_of_birth(entity.getDate_of_birth());
+        dto.setIsAlive(entity.getIsAlive());
+
+        return dto;
     }
 
     @Override
@@ -54,8 +65,9 @@ public class FamilyMemberBoImpl implements FamilyMemberBO {
     }
 
     @Override
-    public FamilyMember getAllFamilyMemberData(String id) throws SQLException, ClassNotFoundException {
-        return familyMemberDAO.getAllData(id);
+    public FamilyMemberDto getAllFamilyMemberData(String id) throws SQLException, ClassNotFoundException {
+       // return familyMemberDAO.getAllData(id);
+        return null;
     }
 
     @Override

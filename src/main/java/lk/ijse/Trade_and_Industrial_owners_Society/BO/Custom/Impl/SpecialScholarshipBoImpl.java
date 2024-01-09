@@ -13,8 +13,17 @@ public class SpecialScholarshipBoImpl implements SpecialScholarshipBO {
     SpecialScholarshipDAO specialScholarshipDAO = new SpecialScholarshipDaoImpl();
 
     @Override
-    public SpecialSchol getData(String id) throws SQLException, ClassNotFoundException {
-        return specialScholarshipDAO.getData(id);
+    public SpecialScholDto getData(String id) throws SQLException, ClassNotFoundException {
+        SpecialSchol entity = specialScholarshipDAO.getData(id);
+        SpecialScholDto dto = new SpecialScholDto();
+
+        dto.setSchol_id(entity.getSchol_id());
+        dto.setMember_id(entity.getMember_id());
+        dto.setMember_name(entity.getMember_name());
+        dto.setDate(entity.getDate());
+        dto.setAmount(entity.getAmount());
+
+        return dto;
     }
 
     @Override

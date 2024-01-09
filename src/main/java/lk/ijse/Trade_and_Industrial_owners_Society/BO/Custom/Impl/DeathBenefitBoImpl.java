@@ -16,8 +16,16 @@ public class DeathBenefitBoImpl implements DeathBenefitBO {
     DeathBenefitDAO deathBenefitDAO = new DeathBenefitDaoImpl();
 
     @Override
-    public Donation getData(String id) throws SQLException, ClassNotFoundException {
-        return deathBenefitDAO.getData(id);
+    public DonationDto getData(String id) throws SQLException, ClassNotFoundException {
+        Donation entity = deathBenefitDAO.getData(id);
+        DonationDto dto = new DonationDto();
+
+        dto.setDonation_id(entity.getDonation_id());
+        dto.setDate(entity.getDate());
+        dto.setAmount(entity.getAmount());
+        dto.setFamily_member_id( entity.getFamily_member_id());
+
+        return dto;
     }
 
     @Override

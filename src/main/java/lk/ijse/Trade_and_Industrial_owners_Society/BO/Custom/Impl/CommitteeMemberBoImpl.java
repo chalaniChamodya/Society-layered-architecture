@@ -13,8 +13,16 @@ public class CommitteeMemberBoImpl implements CommitteeMemberBO {
     CommitteeMemberDao committeeMemberDao = (CommitteeMemberDao) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.COMMITTEE_MEMBER);
 
     @Override
-    public CommitteeMember getData(String id) throws SQLException, ClassNotFoundException {
-        return committeeMemberDao.getData(id);
+    public CommitteeMemberDto getData(String id) throws SQLException, ClassNotFoundException {
+        CommitteeMemberDto dto = new CommitteeMemberDto();
+        CommitteeMember entity = committeeMemberDao.getData(id);
+        dto.setCom_mem_id(entity.getCom_mem_id());
+        dto.setMember_id(entity.getMember_id());
+        dto.setName(entity.getName());
+        dto.setPosition(entity.getPosition());
+        dto.setDate(entity.getDate());
+
+        return dto;
     }
 
     @Override

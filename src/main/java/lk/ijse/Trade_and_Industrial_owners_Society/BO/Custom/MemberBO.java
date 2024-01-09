@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public interface MemberBO extends SuperBO {
-    Member getData(String id) throws SQLException, ClassNotFoundException;
+    MemberDto getData(String id) throws SQLException, ClassNotFoundException;
     boolean saveMember(MemberDto dto) throws SQLException, ClassNotFoundException;
     boolean updateMember(MemberDto dto) throws SQLException, ClassNotFoundException;
     boolean deleteMember(String id) throws SQLException, ClassNotFoundException;

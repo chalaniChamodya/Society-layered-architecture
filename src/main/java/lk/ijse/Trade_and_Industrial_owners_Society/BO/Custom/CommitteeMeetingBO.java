@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface CommitteeMeetingBO extends SuperBO {
-    CommitteeMeeting getData(String id) throws SQLException, ClassNotFoundException;
+    CommitteeMeetingDto getData(String id) throws SQLException, ClassNotFoundException;
     boolean saveCommitteeMeting(CommitteeMeetingDto dto) throws SQLException, ClassNotFoundException;
     boolean updateCommitteeMeeting(CommitteeMeetingDto dto) throws SQLException, ClassNotFoundException;
     boolean deleteCommitteeMeeting(String id) throws SQLException, ClassNotFoundException;

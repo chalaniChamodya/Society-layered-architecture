@@ -13,8 +13,16 @@ public class CommitteeMeetingBoImpl implements CommitteeMeetingBO {
     CommitteeMeetingDAO committeeMeetingDAO = new CommitteeMeetingDaoImpl();
 
     @Override
-    public CommitteeMeeting getData(String id) throws SQLException, ClassNotFoundException {
-        return committeeMeetingDAO.getData(id);
+    public CommitteeMeetingDto getData(String id) throws SQLException, ClassNotFoundException {
+        CommitteeMeetingDto dto = new CommitteeMeetingDto();
+        CommitteeMeeting entity = committeeMeetingDAO.getData(id);
+        dto.setCommittee_meeting_id(entity.getCommittee_meeting_id());
+        dto.setDate(entity.getDate());
+        dto.setTime(entity.getTime());
+        dto.setDescription(entity.getDescription());
+        dto.setLocation(entity.getLocation());
+
+        return dto;
     }
 
     @Override

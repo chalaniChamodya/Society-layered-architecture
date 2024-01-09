@@ -13,8 +13,18 @@ public class SponsorBoImpl implements SponsorBO {
     SponsorDAO sponsorDAO = new SponsorDaoImpl();
 
     @Override
-    public Sponsor getData(String id) throws SQLException, ClassNotFoundException {
-        return sponsorDAO.getData(id);
+    public SponsorDto getData(String id) throws SQLException, ClassNotFoundException {
+        Sponsor entity = sponsorDAO.getData(id);
+        SponsorDto dto = new SponsorDto();
+
+        dto.setSponsor_id(entity.getSponsor_id());
+        dto.setProgram_id(entity.getProgram_id());
+        dto.setSponsor_name(entity.getSponsor_name());
+        dto.setDescription(entity.getDescription());
+        dto.setDate(entity.getDate());
+        dto.setAmount(entity.getAmount());
+
+        return dto;
     }
 
     @Override

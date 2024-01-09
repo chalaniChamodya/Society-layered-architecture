@@ -13,8 +13,17 @@ public class SubscriptionFeeBoImpl implements SubscriptionFeeBO {
     SubscriptionFeeDAO subscriptionFeeDAO = new SubscriptionFeeDaoImpl();
 
     @Override
-    public SubscriptionFee getData(String id) throws SQLException, ClassNotFoundException {
-        return subscriptionFeeDAO.getData(id);
+    public SubscriptionFeeDto getData(String id) throws SQLException, ClassNotFoundException {
+        SubscriptionFee entity = subscriptionFeeDAO.getData(id);
+        SubscriptionFeeDto dto = new SubscriptionFeeDto();
+
+        dto.setSubscription_fee_id(entity.getSubscription_fee_id());
+        dto.setMember_id(entity.getMember_id());
+        dto.setMember_name(entity.getMember_name());
+        dto.setDate(entity.getDate());
+        dto.setAmount(entity.getAmount());
+
+        return dto;
     }
 
     @Override

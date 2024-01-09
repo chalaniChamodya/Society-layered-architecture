@@ -13,8 +13,16 @@ public class ScholarshipBoImpl implements ScholarshipBO {
     ScholarshipDAO scholarshipDAO = new ScholarshipDaoImpl();
 
     @Override
-    public Scholarship getData(String id) throws SQLException, ClassNotFoundException {
-        return scholarshipDAO.getData(id);
+    public ScholarshipDto getData(String id) throws SQLException, ClassNotFoundException {
+        Scholarship entity = scholarshipDAO.getData(id);
+        ScholarshipDto dto = new ScholarshipDto();
+
+        dto.setDonation_id(entity.getDonation_id());
+        dto.setDate(entity.getDate());
+        dto.setAmount(entity.getAmount());
+        dto.setFamily_member_id(entity.getFamily_member_id());
+
+        return dto;
     }
 
     @Override

@@ -13,8 +13,17 @@ public class MembershipFeeBoImpl implements MembershipFeeBO {
     MembershipFeeDAO membershipFeeDAO = new MembershipFeeDaoImpl();
 
     @Override
-    public MembershipFee getData(String id) throws SQLException, ClassNotFoundException {
-        return membershipFeeDAO.getData(id);
+    public MembershipFeeDto getData(String id) throws SQLException, ClassNotFoundException {
+        MembershipFee entity = membershipFeeDAO.getData(id);
+        MembershipFeeDto dto = new MembershipFeeDto();
+
+        dto.setMember_fee_id(entity.getMember_fee_id());
+        dto.setMember_id(entity.getMember_id());
+        dto.setMember_name(entity.getMember_name());
+        dto.setDate(entity.getDate());
+        dto.setAmount(entity.getAmount());
+
+        return dto;
     }
 
     @Override

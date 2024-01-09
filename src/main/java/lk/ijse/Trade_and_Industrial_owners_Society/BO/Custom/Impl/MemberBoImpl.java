@@ -16,8 +16,25 @@ public class MemberBoImpl implements MemberBO {
 
 
     @Override
-    public Member getData(String id) throws SQLException, ClassNotFoundException {
-        return memberDAO.getData(id);
+    public MemberDto getData(String id) throws SQLException, ClassNotFoundException {
+        Member entity = memberDAO.getData(id);
+        MemberDto dto = new MemberDto();
+
+        dto.setMember_id(entity.getMember_id());
+        dto.setName_with_initials(entity.getName_with_initials());
+        dto.setFull_name(entity.getFull_name());
+        dto.setBusiness_address(entity.getBusiness_address());
+        dto.setPersonal_address(entity.getPersonal_address());
+        dto.setBusiness_type(entity.getBusiness_type());
+        dto.setNic(entity.getNic());
+        dto.setEmail(entity.getEmail());
+        dto.setDate_of_birth(entity.getDate_of_birth());
+        dto.setPersonal_contact_num(entity.getPersonal_contact_num());
+        dto.setBusiness_contact_num(entity.getBusiness_contact_num());
+        dto.setAdmission_fee(entity.getAdmission_fee());
+        dto.setJoined_date(entity.getJoined_date());
+
+        return dto;
     }
 
     @Override

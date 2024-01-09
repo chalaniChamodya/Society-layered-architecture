@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public interface MeetingAttendanceBO extends SuperBO {
-    MeetingAttendance getData(String id) throws SQLException, ClassNotFoundException;
+    MeetingAttendanceDto getData(String id) throws SQLException, ClassNotFoundException;
     boolean save(MeetingAttendanceDto dto) throws SQLException, ClassNotFoundException;
     ArrayList<String> getAllId() throws SQLException, ClassNotFoundException;
     boolean deleteAttendance(String id, String mem_id) throws SQLException, ClassNotFoundException;

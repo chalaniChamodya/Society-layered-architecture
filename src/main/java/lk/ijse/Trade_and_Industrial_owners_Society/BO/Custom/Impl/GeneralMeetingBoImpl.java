@@ -13,8 +13,17 @@ public class GeneralMeetingBoImpl implements GeneralMeetingBO {
     GeneralMeetingDAO generalMeetingDAO = new GeneralMeetingDaoImpl();
 
     @Override
-    public GeneralMeeting getData(String id) throws SQLException, ClassNotFoundException {
-        return generalMeetingDAO.getData(id);
+    public GeneralMeetingDto getData(String id) throws SQLException, ClassNotFoundException {
+        GeneralMeeting entity = generalMeetingDAO.getData(id);
+        GeneralMeetingDto dto = new GeneralMeetingDto();
+
+        dto.setGeneral_meeting_id(entity.getGeneral_meeting_id());
+        dto.setDate(entity.getDate());
+        dto.setTime(entity.getTime());
+        dto.setDescription(entity.getDescription());
+        dto.setLocation(entity.getLocation());
+
+        return dto;
     }
 
     @Override
