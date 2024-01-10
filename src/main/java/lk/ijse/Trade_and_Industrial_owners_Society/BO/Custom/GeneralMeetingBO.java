@@ -15,4 +15,5 @@ public interface GeneralMeetingBO extends SuperBO {
     String generateNewGeneralMeetingId() throws SQLException, ClassNotFoundException;
     ArrayList<String> getAllGeneralMeetingId() throws SQLException, ClassNotFoundException;
     String getTodayGeneralMeetingId() throws SQLException, ClassNotFoundException;
+    ArrayList<String> getUpComingMeetingId() throws SQLException, ClassNotFoundException;
 }

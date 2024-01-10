@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FundingProgramBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FundingProgramDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FundingProgramDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FundingProgramDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.FundingProgram;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class FundingProgramBoImpl implements FundingProgramBO {
-    FundingProgramDAO fundingProgramDAO = new FundingProgramDaoImpl();
+    FundingProgramDAO fundingProgramDAO = (FundingProgramDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.FUNDING_PROGRAM);
 
     @Override
     public FundingProgramDto getData(String id) throws SQLException, ClassNotFoundException {

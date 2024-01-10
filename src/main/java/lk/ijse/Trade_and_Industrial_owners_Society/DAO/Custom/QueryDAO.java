@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public interface QueryDAO extends SuperDAO {
     ArrayList<String> getCommitteeMemberMailAddress() throws SQLException, ClassNotFoundException;
-    ObservableList<PieChart.Data> getFundDataForPieChart() throws SQLException;
+    ObservableList<PieChart.Data> getFundDataForPieChart() throws SQLException, ClassNotFoundException;
     ObservableList<XYChart.Data<String, Number>> monthlyFund() throws SQLException;
     ObservableList<XYChart.Data<String, Number>> monthlyExpense() throws SQLException;
     ArrayList<String> getAllEmailAddress() throws SQLException, ClassNotFoundException;

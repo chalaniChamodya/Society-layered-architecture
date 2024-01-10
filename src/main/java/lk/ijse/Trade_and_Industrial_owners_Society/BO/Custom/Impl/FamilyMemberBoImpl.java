@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.FamilyMemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FamilyMemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FamilyMemberDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.FamilyMemberDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.FamilyMember;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class FamilyMemberBoImpl implements FamilyMemberBO {
-    FamilyMemberDAO familyMemberDAO = new FamilyMemberDaoImpl();
+    FamilyMemberDAO familyMemberDAO = (FamilyMemberDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.FAMILY_MEMBER);
 
 
     @Override

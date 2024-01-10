@@ -10,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.BOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMemberBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMemberDto;
@@ -39,7 +40,7 @@ public class CommitteeMemberUpdateFormController {
 
     private static CommitteeMemberUpdateFormController controller;
 
-    CommitteeMemberBO committeeMemberBO = new CommitteeMemberBoImpl();
+    CommitteeMemberBO committeeMemberBO = (CommitteeMemberBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.COMMITTEE_MEMBER);
 
     public CommitteeMemberUpdateFormController(){controller = this;}
 

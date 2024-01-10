@@ -10,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.BOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMemberBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MemberBoImpl;
@@ -38,8 +39,8 @@ public class CommitteeMemberFormController {
     public AnchorPane crudPane;
     private static CommitteeMemberFormController controller;
 
-    CommitteeMemberBO committeeMemberBO = new CommitteeMemberBoImpl();
-    MemberBO memberBO = new MemberBoImpl();
+    CommitteeMemberBO committeeMemberBO = (CommitteeMemberBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.COMMITTEE_MEMBER);
+    MemberBO memberBO = (MemberBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.MEMBER);
 
     public CommitteeMemberFormController(){controller = this;}
 

@@ -7,6 +7,8 @@ import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class CommitteeMeetingDaoImpl implements CommitteeMeetingDAO {
@@ -65,9 +67,7 @@ public class CommitteeMeetingDaoImpl implements CommitteeMeetingDAO {
     @Override
     public ResultSet generateNewId() throws SQLException, ClassNotFoundException {
         return SQLUtill.execute("SELECT com_meeting_id FROM committee_meeting ORDER BY com_meeting_id DESC LIMIT 1");
-
     }
-
 
     @Override
     public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {
@@ -79,5 +79,15 @@ public class CommitteeMeetingDaoImpl implements CommitteeMeetingDAO {
             list.add(resultSet.getString(1));
         }
         return list;
+    }
+
+    @Override
+    public ResultSet getUpComingMeetingId() throws SQLException, ClassNotFoundException {
+        YearMonth currentMonth = YearMonth.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        String date = currentMonth.format(formatter);
+
+        return SQLUtill.execute("SELECT * FROM committee_meeting WHERE DATE_FORMAT(date, '%Y-%m') = ?", date);
     }
 }

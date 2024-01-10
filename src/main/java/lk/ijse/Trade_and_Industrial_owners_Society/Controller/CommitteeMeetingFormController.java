@@ -10,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.BOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMeetingBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMeetingBoImpl;
@@ -47,8 +48,8 @@ public class CommitteeMeetingFormController {
     public String meetingId;
     private static CommitteeMeetingFormController controller;
 
-    GeneralMeetingBO generalMeetingBO = new GeneralMeetingBoImpl();
-    CommitteeMeetingBO committeeMeetingBO = new CommitteeMeetingBoImpl();
+    GeneralMeetingBO generalMeetingBO = (GeneralMeetingBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.GENERAL_MEETING);
+    CommitteeMeetingBO committeeMeetingBO = (CommitteeMeetingBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.COMMITTEE_MEETING);
     MemberBO memberBO = new MemberBoImpl();
 
     public CommitteeMeetingFormController(){

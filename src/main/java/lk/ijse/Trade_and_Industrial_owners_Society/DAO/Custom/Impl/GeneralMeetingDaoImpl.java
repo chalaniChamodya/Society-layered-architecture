@@ -7,6 +7,8 @@ import lk.ijse.Trade_and_Industrial_owners_Society.Utill.SQLUtill;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class GeneralMeetingDaoImpl implements GeneralMeetingDAO {
@@ -86,5 +88,15 @@ public class GeneralMeetingDaoImpl implements GeneralMeetingDAO {
             id = resultSet.getString(1);
         }
         return id;
+    }
+
+    @Override
+    public ResultSet getUpComingMeetingId() throws SQLException, ClassNotFoundException {
+        YearMonth currentMonth = YearMonth.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        String date = currentMonth.format(formatter);
+
+        return SQLUtill.execute("SELECT * FROM general_meeting WHERE DATE_FORMAT(date, '%Y-%m') = ?", date);
     }
 }

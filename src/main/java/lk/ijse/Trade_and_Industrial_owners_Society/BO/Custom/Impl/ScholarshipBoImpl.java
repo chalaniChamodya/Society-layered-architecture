@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.ScholarshipBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.ScholarshipDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.ScholarshipDAO;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.ScholarshipDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Scholarship;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ScholarshipBoImpl implements ScholarshipBO {
-    ScholarshipDAO scholarshipDAO = new ScholarshipDaoImpl();
+    ScholarshipDAO scholarshipDAO = (ScholarshipDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SCHOLARSHIP);
 
     @Override
     public ScholarshipDto getData(String id) throws SQLException, ClassNotFoundException {

@@ -5,6 +5,7 @@ import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.DeathBenefitDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.FamilyMemberDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.DeathBenefitDaoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.FamilyMemberDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.DonationDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.Donation;
 
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DeathBenefitBoImpl implements DeathBenefitBO {
-    DeathBenefitDAO deathBenefitDAO = new DeathBenefitDaoImpl();
+    DeathBenefitDAO deathBenefitDAO = (DeathBenefitDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.DEATH_BENEFIT);
 
     @Override
     public DonationDto getData(String id) throws SQLException, ClassNotFoundException {

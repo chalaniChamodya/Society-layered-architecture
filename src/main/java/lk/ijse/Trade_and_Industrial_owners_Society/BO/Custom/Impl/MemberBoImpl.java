@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MemberBoImpl implements MemberBO {
@@ -113,11 +114,37 @@ public class MemberBoImpl implements MemberBO {
 
     @Override
     public ArrayList<String> search(String searchTerm) throws SQLException, ClassNotFoundException {
-        return memberDAO.search(searchTerm);
+        ResultSet resultSet = memberDAO.search(searchTerm);
+
+        ArrayList<String> searchList = new ArrayList<>();
+
+        if(resultSet.next()){
+            String memberId = resultSet.getString(1);
+            String name = resultSet.getString(2);
+            String joinedDate = resultSet.getString("joined_date");
+            String businessType = resultSet.getString("business_type");
+
+            searchList.add(memberId);
+            searchList.add(name);
+            searchList.add(joinedDate);
+            searchList.add(businessType);
+            searchList.add(resultSet.getString("business_contact_num"));
+            searchList.add(resultSet.getString("business_address"));
+        }
+        return searchList;
     }
 
     @Override
     public Map<String, LocalDate> calculateMemberDuration() throws SQLException, ClassNotFoundException {
-        return memberDAO.calculateMemberDuration();
+        ResultSet resultSet = memberDAO.calculateMemberDuration();
+
+        Map<String, LocalDate> memberJoinDates = new HashMap<>();
+
+        if (resultSet.next()){
+            String MemberId = resultSet.getString("member_id");
+            LocalDate joinedDate = resultSet.getDate("joined_date").toLocalDate();
+            memberJoinDates.put(MemberId, joinedDate);
+        }
+        return memberJoinDates;
     }
 }

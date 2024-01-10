@@ -32,13 +32,13 @@ public class BOFactory {
             case MEMBERSHIP_FEE:
                 return new MembershipFeeBoImpl();
             case DEATH_DONATION:
-                return null;
+                return new DeathBenefitBoImpl();
             case SCHOLARSHIP:
                 return new ScholarshipBoImpl();
             case SPECIAL_SCHOLARSHIP:
                 return new SpecialScholarshipBoImpl();
             case QUERY:
-                return null;
+                return new QueryBoImpl();
             default:
                 return null;
         }

@@ -3,6 +3,7 @@ package lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMeetingBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.CommitteeMeetingDAO;
 import lk.ijse.Trade_and_Industrial_owners_Society.DAO.Custom.Impl.CommitteeMeetingDaoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.DAO.DAOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMeetingDto;
 import lk.ijse.Trade_and_Industrial_owners_Society.Entity.CommitteeMeeting;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CommitteeMeetingBoImpl implements CommitteeMeetingBO {
-    CommitteeMeetingDAO committeeMeetingDAO = new CommitteeMeetingDaoImpl();
+    CommitteeMeetingDAO committeeMeetingDAO = (CommitteeMeetingDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.COMMITTEE_MEETING);
 
     @Override
     public CommitteeMeetingDto getData(String id) throws SQLException, ClassNotFoundException {

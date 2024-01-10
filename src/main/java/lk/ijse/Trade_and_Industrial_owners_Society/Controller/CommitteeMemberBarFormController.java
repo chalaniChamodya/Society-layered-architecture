@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.BOFactory;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMemberBO;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMemberBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Dto.CommitteeMemberDto;
@@ -20,7 +21,7 @@ public class CommitteeMemberBarFormController {
     public ImageView btnDelete;
     public ImageView btnUpdate;
 
-    CommitteeMemberBO committeeMemberBO = new CommitteeMemberBoImpl();
+    CommitteeMemberBO committeeMemberBO = (CommitteeMemberBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.COMMITTEE_MEMBER);
 
     public static void getId(){CommitteeMemberBarFormController.id = id;}
 

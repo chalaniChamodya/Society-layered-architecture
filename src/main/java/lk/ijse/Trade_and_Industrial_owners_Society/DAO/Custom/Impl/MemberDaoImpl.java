@@ -124,40 +124,14 @@ public class MemberDaoImpl implements MemberDAO {
 
 
     @Override
-    public ArrayList<String> search(String searchTerm) throws SQLException, ClassNotFoundException {
-        ArrayList<String> searchList = new ArrayList<>();
+    public ResultSet search(String searchTerm) throws SQLException, ClassNotFoundException {
         String Name = "%"+searchTerm+"%";
-
-        ResultSet resultSet = SQLUtill.execute("SELECT * FROM member WHERE member_id = ? OR name_with_initials LIKE ?", searchTerm, Name);
-
-        if(resultSet.next()){
-            String memberId = resultSet.getString(1);
-            String name = resultSet.getString(2);
-            String joinedDate = resultSet.getString("joined_date");
-            String businessType = resultSet.getString("business_type");
-
-            searchList.add(memberId);
-            searchList.add(name);
-            searchList.add(joinedDate);
-            searchList.add(businessType);
-            searchList.add(resultSet.getString("business_contact_num"));
-            searchList.add(resultSet.getString("business_address"));
-        }
-        return searchList;
+        return SQLUtill.execute("SELECT * FROM member WHERE member_id = ? OR name_with_initials LIKE ?", searchTerm, Name);
     }
 
     @Override
-    public Map<String, LocalDate> calculateMemberDuration() throws SQLException, ClassNotFoundException {
-        Map<String, LocalDate> memberJoinDates = new HashMap<>();
-
-        ResultSet resultSet = SQLUtill.execute("SELECT member_id, joined_date FROM member");
-
-        if (resultSet.next()){
-            String MemberId = resultSet.getString("member_id");
-            LocalDate joinedDate = resultSet.getDate("joined_date").toLocalDate();
-            memberJoinDates.put(MemberId, joinedDate);
-        }
-        return memberJoinDates;
+    public ResultSet calculateMemberDuration() throws SQLException, ClassNotFoundException {
+        return SQLUtill.execute("SELECT member_id, joined_date FROM member");
     }
 
     @Override

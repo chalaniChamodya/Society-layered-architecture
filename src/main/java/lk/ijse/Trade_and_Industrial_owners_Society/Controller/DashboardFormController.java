@@ -11,10 +11,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.CommitteeMeetingBO;
-import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.GeneralMeetingBO;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.BOFactory;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.*;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.CommitteeMeetingBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.GeneralMeetingBoImpl;
+import lk.ijse.Trade_and_Industrial_owners_Society.BO.Custom.Impl.MeetingAttendanceBoImpl;
 import lk.ijse.Trade_and_Industrial_owners_Society.Utill.Navigation;
 
 import java.io.IOException;
@@ -34,26 +35,29 @@ public class DashboardFormController {
 
    GeneralMeetingBO generalMeetingBO = new GeneralMeetingBoImpl();
    CommitteeMeetingBO committeeMeetingBO = new CommitteeMeetingBoImpl();
+   MeetingAttendanceBO meetingAttendanceBO = new MeetingAttendanceBoImpl();
+   SubscriptionFeeBO subscriptionFeeBO = (SubscriptionFeeBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.SUBSCRIPTION_FEE);
+   MembershipFeeBO membershipFeeBO = (MembershipFeeBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.MEMBERSHIP_FEE);
+   QueryBO queryBO = (QueryBO) BOFactory.getBoFactory().getTypes(BOFactory.BOTypes.QUERY);
 
-    public void initialize() throws SQLException {
-        /*dashboardModel.generalMeetingAttendanceCount();
-        lblGeneralAttendance.setText(String.valueOf(dashboardModel.generalMeetingAttendanceCount()));
-        lblCommitteeAttendance.setText(String.valueOf(dashboardModel.committeeMeetingAttendanceCount()));
-        lblSubscriptionUnpaid.setText(String.valueOf(dashboardModel.unPaidSubscriptionFeeCount()));
-        lblMembershipUnpaid.setText(String.valueOf(dashboardModel.unPaidMembershipFeeCount()));
+    public void initialize() throws SQLException, ClassNotFoundException {
+        lblGeneralAttendance.setText(String.valueOf(meetingAttendanceBO.generalMeetingAttendanceCount()));
+        lblCommitteeAttendance.setText(String.valueOf(meetingAttendanceBO.committeeMeetingAttendanceCount()));
+        lblSubscriptionUnpaid.setText(String.valueOf(subscriptionFeeBO.unPaidSubscriptionFeeCount()));
+        lblMembershipUnpaid.setText(String.valueOf(membershipFeeBO.unPaidMembershipFeeCount()));
         pieChart();
         comboChart();
-        getUpcomingMeeting();*/
+        getUpcomingMeeting();
     }
 
-    private void getUpcomingMeeting() throws SQLException {
-        /*ArrayList<String> list = null;
-        list = dashboardModel.getUpComingMeetingId();
+    private void getUpcomingMeeting() throws SQLException, ClassNotFoundException {
+        ArrayList<String> list = null;
+        list = generalMeetingBO.getUpComingMeetingId();
 
         vBox.getChildren().clear();
         for(int i = 0; i< list.size(); i++){
             loadTableData(list.get(i));
-        }*/
+        }
     }
 
     private void loadTableData(String id) {
@@ -71,14 +75,13 @@ public class DashboardFormController {
 
     public void pieChart(){
         PieChart pieChart = new PieChart();
-/*
         try {
-            ObservableList<PieChart.Data> pieChartData = dashboardModel.getFundDataForPieChart();
+            ObservableList<PieChart.Data> pieChartData = queryBO.getFundDataForPieChart();
             pieChart.setData(pieChartData);
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        panePieChart.getChildren().add(pieChart);*/
+        panePieChart.getChildren().add(pieChart);
     }
 
     public void comboChart() throws SQLException {
